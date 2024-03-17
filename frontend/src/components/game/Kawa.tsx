@@ -6,12 +6,22 @@ interface Props {
 }
 
 const Kawa : React.VFC<Props> = ({kawa}) => {
+    const splitKawa: HaiInfo[][] = [];
+    for (let i = 0; i<kawa.length/6; i++) {
+        splitKawa.push(kawa.slice(i*6,i*6+6));
+    }
     return (
-        <div className="flex">
+        <div className="mb-4">
             {
-                kawa.map((hai, index) => {
-                    return <Hai hai={hai} key={index} />
-                })
+                splitKawa.map((kawa, i) => (
+                    <div className="flex" key={i}>
+                        {
+                            kawa.map((hai, j) => (
+                                <Hai hai={hai} key={j} />
+                                ))
+                        }
+                    </div>
+                ))
             }
         </div>
     )

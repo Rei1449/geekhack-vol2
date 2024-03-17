@@ -68,7 +68,7 @@ const sortTehai = (tehai:HaiInfo[]): void => {
 }
 
 const agari = (): void => {
-
+    window.alert("あがり！！！")
 }
 
 const Game = () => {
@@ -144,13 +144,12 @@ const Game = () => {
     return (
         <>
             <button onClick={startGame} >Game Start</button>
-            <button onClick={tumo} >つも</button>
             <Player tehai={playerTehai} kawa={playerKawa} discardMethod={progressTurn}/>
             <Oponent tehai={oponent1Tehai} kawa={oponent1Kawa}/>
             <Oponent tehai={oponent2Tehai} kawa={oponent2Kawa}/>
             <Oponent tehai={oponent3Tehai} kawa={oponent3Kawa}/>
             <AgariButton onClickMethod={agari}/>
-            <p>length: {yama.length}</p>
+            <p>yama.length: {yama.length}</p>
         </>
     )
 }
