@@ -4,22 +4,8 @@ import { useState } from 'react'
 import Player from './Player.tsx'
 import Oponent from './Oponent.tsx'
 import AgariButton from './AgariButton.tsx'
-
-const undefinedHai : HaiInfo = {kind: -1, number: -1};
-
-// Fisher-Yatesシャッフルアルゴリズムを使用して配列をシャッフルする関数
-function shuffleArray<T>(array: T[]): T[] {
-    const shuffledArray = [...array]; // 元の配列をコピーする
-
-    for (let i = shuffledArray.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1)); // 0からiまでのランダムなインデックスを生成
-
-        // 要素の入れ替え
-        [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
-    }
-
-    return shuffledArray;
-}
+import { GetHaiName, ShuffleArray, IsSameHai, SortHaiArray } from './CommonMethods.tsx'
+import { UNDEFINED_HAI } from './Constants.tsx'
 
 const makeYama = (): HaiInfo[] => {
     const yama: HaiInfo[] = [];
@@ -37,38 +23,16 @@ const makeYama = (): HaiInfo[] => {
             yama.push({kind: 4, number: number});
         }
     }
-
-    return shuffleArray(yama);
+    return ShuffleArray(yama);
 }
 
-const equalHai = (hai1:HaiInfo, hai2:HaiInfo):boolean => {
-    if (hai1.kind == hai2.kind && hai1.number == hai2.number) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-const sortTehai = (tehai:HaiInfo[]): void => {
-    tehai.sort((hai1:HaiInfo, hai2:HaiInfo) => {
-        if (hai1.kind < hai2.kind) {
-            return -1;
-        } else if (hai1.kind > hai2.kind) {
-            return 1;
-        }
-
-        if (hai1.number < hai2.number) {
-            return -1;
-        } else if (hai1.number > hai2.number) {
-            return 1;
-        }
-
-        return 0;
-    })
-}
-
-const agari = (): void => {
-    window.alert("あがり！！！")
+const agari = (tehai:HaiInfo[]): void => {
+    const stringTehai: string[] = [];
+    SortHaiArray(tehai);
+    tehai.map((hai) => {
+        stringTehai.push(GetHaiName(hai));
+    });
+    console.log(stringTehai);
 }
 
 const Game = () => {
@@ -96,9 +60,9 @@ const Game = () => {
     const discard = (targetHai: HaiInfo) : boolean => {
         const newPlayerTehai = playerTehai;
         for (let i=0; i<playerTehai.length; i++) {
-            if (equalHai(targetHai, playerTehai[i])) {
+            if (IsSameHai(targetHai, playerTehai[i])) {
                 newPlayerTehai.splice(i, 1);
-                sortTehai(newPlayerTehai);
+                SortHaiArray(newPlayerTehai);
                 setPlayerTehai(newPlayerTehai);
                 setPlayerKawa([...playerKawa, targetHai]);
                 return true;
@@ -127,13 +91,13 @@ const Game = () => {
         const newOponent3Tehai : HaiInfo[] = [];
         // 配牌
         for (let i = 0; i < 13; i++) {
-            newPlayerTehai.push(newYama.pop() || undefinedHai);
-            newOponent1Tehai.push(newYama.pop() || undefinedHai);
-            newOponent2Tehai.push(newYama.pop() || undefinedHai);
-            newOponent3Tehai.push(newYama.pop() || undefinedHai);
+            newPlayerTehai.push(newYama.pop() || UNDEFINED_HAI);
+            newOponent1Tehai.push(newYama.pop() || UNDEFINED_HAI);
+            newOponent2Tehai.push(newYama.pop() || UNDEFINED_HAI);
+            newOponent3Tehai.push(newYama.pop() || UNDEFINED_HAI);
         }
-        sortTehai(newPlayerTehai);
-        newPlayerTehai.push(newYama.pop() || undefinedHai);
+        SortHaiArray(newPlayerTehai);
+        newPlayerTehai.push(newYama.pop() || UNDEFINED_HAI);
         setYama(newYama);
         setPlayerTehai(newPlayerTehai);
         setopOponent1Tehai(newOponent1Tehai);
@@ -148,7 +112,7 @@ const Game = () => {
             <Oponent tehai={oponent1Tehai} kawa={oponent1Kawa}/>
             <Oponent tehai={oponent2Tehai} kawa={oponent2Kawa}/>
             <Oponent tehai={oponent3Tehai} kawa={oponent3Kawa}/>
-            <AgariButton onClickMethod={agari}/>
+            <AgariButton onClickMethod={() => agari(playerTehai)}/>
             <p>yama.length: {yama.length}</p>
         </>
     )
