@@ -15,6 +15,8 @@ import os
 
 from src.crud import crud
 
+import requests
+
 
 router = APIRouter()
 
