@@ -6,7 +6,7 @@ interface Props {
 }
 
 const HaiInPlayerTehai: React.VFC<Props> = ({ hai, discardMethod }) => {
-    const imgSrc = "../../../public/hai-img/hai" + hai.kind + "_" + hai.number + ".png";
+    const imgSrc = "/hai-img/hai" + hai.kind + "_" + hai.number + ".png";
     return (
       <>
         <img src={imgSrc} className="w-12 hover:-translate-y-4" onClick={() => discardMethod(hai)}/>
