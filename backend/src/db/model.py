@@ -5,7 +5,16 @@ from sqlalchemy import create_engine, Column, String, Text, Integer, Numeric, Da
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import ForeignKey
 
-Engine = create_engine("postgresql://postgres:password@postgres-db:5432/postgres")
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
+
+load_dotenv(verbose=True)
+
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
+
+Engine = create_engine(os.environ.get('DATABASE_URL'))
 
 Base = declarative_base()
 
