@@ -7,13 +7,13 @@ from pydantic import BaseModel
 from typing import Union
 from typing import List
 
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 import os
 
 from src.crud import crud
+from src.db.model import Engine
 
 import requests
 import openai
@@ -22,19 +22,11 @@ import openai
 router = APIRouter()
 
 class User(BaseModel):
-  id: int
   name: str
   password: str
 
-DATABASE_URL = "postgresql://postgres:password@postgres-db:5432/postgres"
-
-engine = create_engine(DATABASE_URL)
-
 # セッションファクトリを作成
-Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# モデルを定義するための基本となるBaseクラスを作成
-Base = declarative_base()
+Session = sessionmaker(autocommit=False, autoflush=False, bind=Engine)
 
 # セッションを依存性として定義
 def get_db():
@@ -46,7 +38,7 @@ def get_db():
 
 @router.post("/user/register")
 def register_user(user: User, db:Session = Depends(get_db)):
-  return  crud.register_user(db, user.id, user.name, user.password)
+  return  crud.register_user(db, user.name, user.password)
   # return {"res": "ok", "名前": user.name, "パスワード": user.password }
 
 
@@ -87,3 +79,12 @@ async def try_api(data:Data):
     #     return tasks
     # except requests.exceptions.RequestException as e:
     #     raise HTTPException(status_code=500, detail=f"Error calling JSONPlaceholder API: {e}")
+
+class Mahjong(BaseModel):
+  user_name: str
+  hand: str
+
+@router.post("/test/db")
+def register_user(mahjong: Mahjong, db:Session = Depends(get_db)):
+  score = 1000
+  return  crud.register_score(db, mahjong.user_name, score, mahjong.hand)
