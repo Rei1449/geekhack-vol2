@@ -14,7 +14,7 @@ load_dotenv(verbose=True)
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
-Engine = create_engine(os.environ.get('DATABASE_URL'))
+Engine = create_engine(os.environ["DATABASE_URL"].replace("postgres://", "postgresql://"))
 
 Base = declarative_base()
 
