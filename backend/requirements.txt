@@ -12,3 +12,4 @@ python-dotenv==1.0.0
 requests>=2.21.0
 openai==0.28
 DateTime
+replicate

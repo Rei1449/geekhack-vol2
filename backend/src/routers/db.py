@@ -8,7 +8,6 @@ from typing import Union
 from typing import List
 
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
 
 import os
 
