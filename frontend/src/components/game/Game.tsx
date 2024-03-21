@@ -130,7 +130,7 @@ const Game = () => {
 		tehai.map((hai) => {
 			stringTehai.push(GetHaiName(hai));
 		});
-		const res = await fetch("http://localhost:8080/tumo", {
+		const res = await fetch("https://hack-fast-api-65ce6a3d3ac6.herokuapp.com/tumo", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
