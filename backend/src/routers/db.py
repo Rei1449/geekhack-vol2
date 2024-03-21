@@ -10,6 +10,7 @@ from typing import List
 from sqlalchemy.orm import sessionmaker
 
 import os
+from os.path import join, dirname
 
 from src.crud import crud
 from src.db.model import Engine
@@ -17,6 +18,8 @@ from src.db.model import Engine
 import requests
 import openai
 
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
 router = APIRouter()
 
@@ -52,7 +55,7 @@ class Data(BaseModel):
 
 @router.post("/tumo")
 async def try_api(data:Data):
-    openai.api_key = ""
+    openai.api_key = os.environ["CHATGPT_API_KEY"]
     prompt = [
       {
         "role": "system",
