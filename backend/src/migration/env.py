@@ -34,8 +34,13 @@ target_metadata = Base.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
-load_dotenv(dotenv_path=os.path.join(PROJECT_ROOT, '.env'))
-config.set_main_option('sqlalchemy.url', os.getenv('DATABASE_URL'))
+# load_dotenv(dotenv_path=os.path.join(PROJECT_ROOT, '.env'))
+
+load_dotenv(verbose=True)
+
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
+config.set_main_option('sqlalchemy.url', os.environ["DATABASE_URL"].replace("postgres://", "postgresql://"))
 
 
 
