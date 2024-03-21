@@ -56,7 +56,7 @@ async def try_api(data:Data):
     prompt = [
       {
         "role": "system",
-        "content": "あなたは麻雀の点数を計算する人です。絶対数値を返します"
+        "content": "あなたは麻雀の点数を計算する人です。絶対数値を返します。日本語は返しません"
       },
       {
         "role": "user",
@@ -69,16 +69,13 @@ async def try_api(data:Data):
         messages=prompt,
         max_tokens=100
     )
-    return response.choices[0]
-    # try:
-    #     print(data)
-    #     response = requests.get('https://jsonplaceholder.typicode.com/todos')
-    #     response.raise_for_status()
-    #     tasks = response.json()
-    #     return tasks
-    # except requests.exceptions.RequestException as e:
-    #     raise HTTPException(status_code=500, detail=f"Error calling JSONPlaceholder API: {e}")
+    text_response = response.choices[0]['message']['content']
+    number = extract_numbers(text_response)
+    return number
 
+def extract_numbers(input_string: str) -> float:
+    numbers = re.sub(r'\D','', input_string) 
+    return float(numbers) if numbers else None
 class Mahjong(BaseModel):
   user_name: str
   hand: str
