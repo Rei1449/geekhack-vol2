@@ -8,11 +8,6 @@ app.include_router(test.router)
 app.include_router(db.router)
 app.include_router(api.router)
 
-origins = [
-  'https://hack-fast-api-65ce6a3d3ac6.herokuapp.com',
-  'https://hack-mahjong.vercel.app/test',
-]
-
 app.add_middleware(
   CORSMiddleware,
   allow_origins = ["*"],
