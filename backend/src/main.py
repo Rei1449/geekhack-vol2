@@ -1,11 +1,12 @@
 from fastapi import FastAPI
-from src.routers import test, db
+from src.routers import test, db, api
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
 app.include_router(test.router)
 app.include_router(db.router)
+app.include_router(api.router)
 
 origins = [
   'https://hack-fast-api-65ce6a3d3ac6.herokuapp.com',

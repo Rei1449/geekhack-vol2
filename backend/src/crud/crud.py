@@ -18,10 +18,10 @@ def register_user(session, user_name:str, user_password: str):
   session.refresh(user_obj)
   return user_obj
 
-def register_score(session, user_name:str, sco:int, hand:str):
+def register_score(session, user_name:str, score:int, hand:str):
   score_obj = Score(
       user_name =  user_name,
-      score = sco,
+      score = score,
       hand = hand,
   )
   try:
