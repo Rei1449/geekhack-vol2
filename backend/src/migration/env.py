@@ -3,6 +3,7 @@ import sys
 sys.path = ['', '..'] + sys.path[1:]
 
 import os
+from os.path import join, dirname
 from core.config import PROJECT_ROOT
 from dotenv import load_dotenv
 
