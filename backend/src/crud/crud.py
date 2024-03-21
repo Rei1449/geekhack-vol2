@@ -5,6 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi import HTTPException
 
+
 def register_user(session, user_name:str, user_password: str):
   user_obj = User(
       name =  user_name,
@@ -17,6 +18,15 @@ def register_user(session, user_name:str, user_password: str):
   session.commit()
   session.refresh(user_obj)
   return user_obj
+
+def get_user(session, user_name:str, user_password: str):
+    user_info = session.query(User).filter(User.name == f"{user_name}").all()
+    if not user_info:
+        return "入力されたユーザー名は見つかりませんでした。"
+    if user_info[0].password == user_password:
+        return user_info[0]
+    else:
+        return "パスワードが間違っています"
 
 def register_score(session, user_name:str, score:int, hand:str):
   score_obj = Score(

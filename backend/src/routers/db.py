@@ -83,7 +83,6 @@ class Mahjong(BaseModel):
   user_name: str
   hand: str
 
-@router.post("/test/db")
-def register_user(mahjong: Mahjong, db:Session = Depends(get_db)):
-  score = 1000
-  return  crud.register_score(db, mahjong.user_name, score, mahjong.hand)
+@router.post("/user/login")
+def login_user(user: User, db:Session = Depends(get_db)):
+  return  crud.get_user(db, user.name, user.password)
