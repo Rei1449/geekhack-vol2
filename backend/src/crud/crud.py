@@ -41,15 +41,21 @@ def get_user(session, user_name:str, user_password: str):
         return "パスワードが間違っています"
 
 def register_score(session, user_name:str, score:int, hand:str):
-  score_obj = Score(
-      user_name =  user_name,
-      score = score,
-      hand = hand,
-  )
-  try:
-      session.add(score_obj)
-  except:
-      raise HTTPException(status_code=500, detail='error')
-  session.commit()
-  session.refresh(score_obj)
-  return score_obj
+    score_obj = Score(
+        user_name =  user_name,
+        score = score,
+        hand = hand,
+    )
+    try:
+        session.add(score_obj)
+    except:
+        raise HTTPException(status_code=500, detail='error')
+    session.commit()
+    session.refresh(score_obj)
+    return score_obj.score
+
+def get_score(session):
+    low_scores = session.query(Score).order_by(Score.score).limit(3).all()
+    high_scores = session.query(Score).order_by(Score.score.desc()).limit(3).all()
+    score_ranking = {"high":high_scores, "low":low_scores}
+    return score_ranking

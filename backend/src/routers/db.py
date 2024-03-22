@@ -90,3 +90,7 @@ class Mahjong(BaseModel):
 @router.post("/user/login")
 def login_user(user: User, db:Session = Depends(get_db)):
   return  crud.get_user(db, user.name, user.password)
+
+@router.get("/ranking")
+def get_score(db:Session = Depends(get_db)):
+  return  crud.get_score(db)
