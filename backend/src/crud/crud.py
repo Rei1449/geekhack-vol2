@@ -11,7 +11,7 @@ def register_user(session, user_name:str, user_password: str):
     user_info = session.query(User).filter(User.name == f"{user_name}").all()
     if not user_info:
         register_pass_hash = hashlib.sha256()
-        register_pass_hash.updata(user_password.encode())
+        register_pass_hash.update(user_password.encode())
         user_obj = User(
             name =  user_name,
             password = register_pass_hash.hexdigest()
@@ -33,8 +33,9 @@ def get_user(session, user_name:str, user_password: str):
         return "入力されたユーザー名は見つかりませんでした。"
     
     login_pass_hash = hashlib.sha256()
-    login_pass_hash.updata(user_password.encode())
-    if user_info[0].password == :
+    login_pass_hash.update(user_password.encode())
+    print("a")
+    if user_info[0].password == login_pass_hash.hexdigest():
         return user_info[0]
     else:
         return "パスワードが間違っています"
