@@ -1,6 +1,6 @@
 import "../../index.css";
 import type { HaiInfo } from "../../types/HaiInfo.tsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Player from "./Player.tsx";
 import Oponent from "./Oponent.tsx";
 import AgariButton from "./AgariButton.tsx";
@@ -96,8 +96,10 @@ const Game = () => {
 		}
 		tumo();
 	};
-
+	const [isGame, setIsGame] = useState(false);
 	const startGame = (): void => {
+		setAddClass(true);
+		setIsGame(true);
 		const newYama = makeYama();
 		const newPlayerTehai: HaiInfo[] = [];
 		const newOponent1Tehai: HaiInfo[] = [];
@@ -130,13 +132,16 @@ const Game = () => {
 		tehai.map((hai) => {
 			stringTehai.push(GetHaiName(hai));
 		});
-		const res = await fetch("https://hack-fast-api-65ce6a3d3ac6.herokuapp.com/tumo", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ arr: stringTehai }),
-		});
+		const res = await fetch(
+			"https://hack-fast-api-65ce6a3d3ac6.herokuapp.com/tumo",
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ arr: stringTehai }),
+			}
+		);
 		if (res.ok) {
 			const data = await res.json();
 			console.log(data);
@@ -146,17 +151,61 @@ const Game = () => {
 			console.log("error");
 		}
 	};
+	useEffect(() => {
+		VANTA.DOTS({
+			el: "#game",
+			mouseControls: true,
+			touchControls: true,
+			gyroControls: false,
+			minHeight: 200.0,
+			minWidth: 200.0,
+			scale: 1.0,
+			scaleMobile: 1.0,
+			color: 0x6e20ff,
+			color2: 0x6e20ff,
+			size: 3,
+			spacing: 14.0,
+			showLines: false,
+		});
+	}, []);
+	const [addClass, setAddClass] = useState<boolean>(false);
+	// const timeoutId = setTimeout(() => {
+	// 	setAddClass(true);
+	// }, 700);
+
 	return (
-		<>
-			<button onClick={startGame}>Game Start</button>
-			<Player
-				tehai={playerTehai}
-				kawa={playerKawa}
-				discardMethod={progressTurn}
-			/>
-			<Oponent tehai={oponent1Tehai} kawa={oponent1Kawa} />
-			<Oponent tehai={oponent2Tehai} kawa={oponent2Kawa} />
-			<Oponent tehai={oponent3Tehai} kawa={oponent3Kawa} />
+		<div id="game" className="w-screen h-screen">
+			{isGame ? (
+				<>
+					<p>ゲーム中</p>
+				</>
+			) : (
+				<>
+					<button
+						onClick={() => {
+							startGame();
+						}}>
+						Game Start
+					</button>
+				</>
+			)}
+			<div
+				className={
+					addClass ? "opacity-100 duration-300" : "opacity-0 duration-300"
+				}>
+				<Player
+					tehai={playerTehai}
+					kawa={playerKawa}
+					discardMethod={progressTurn}
+				/>
+			</div>
+
+			<div className="hidden">
+				<Oponent tehai={oponent1Tehai} kawa={oponent1Kawa} />
+				<Oponent tehai={oponent2Tehai} kawa={oponent2Kawa} />
+				<Oponent tehai={oponent3Tehai} kawa={oponent3Kawa} />
+			</div>
+
 			<Dialog>
 				<DialogTrigger>
 					<p>AIを選択する</p>
@@ -173,13 +222,13 @@ const Game = () => {
 						<DialogTitle>
 							<AgariButton onClickMethod={() => tryApi(playerTehai)} />
 						</DialogTitle>
-						<DialogDescription>{showData}!!!</DialogDescription>
+						<DialogDescription>{showData}</DialogDescription>
 					</DialogHeader>
 				</DialogContent>
 			</Dialog>
 
 			<p>yama.length: {yama.length}</p>
-		</>
+		</div>
 	);
 };
 
