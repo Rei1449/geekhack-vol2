@@ -115,7 +115,7 @@ const Game = () => {
 	// ゲーム結果を計算
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [showData, setShowData] = useState<number | null>(null);
-	const [num, setNum] = useState(0);
+	const [num, setNum] = useState<number | null>(null);
 	const handleAiNum = (num: number) => {
 		setNum(num);
 	};
@@ -165,14 +165,125 @@ const Game = () => {
 	// }, 700);
 
 	return (
-		<div id="game" className="w-screen h-screen bg-[#333333]">
+		<div id="game" className="w-screen h-screen bg-[#151515] p-10">
 			{isGame ? (
 				<>
-					<p>ゲーム中</p>
+					<Dialog>
+						<DialogTrigger className="duration-200  hover:bg-[#38b48b] text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
+							{isGame && (
+								<>
+									<p className="">select AI</p>
+								</>
+							)}
+						</DialogTrigger>
+						<DialogContent className="bg-origin border-gray-800 min-w-[70%] min-h-[80%] p-20">
+							<DialogHeader className="w-full overflow-x-scroll">
+								<p className="text-white flex items-center">
+									<span className="text-xl">Tehai</span>
+								</p>
+								<div className="flex">
+									{playerTehai.map((hai, index) => {
+										if (index < 13) {
+											return <ViewTehai hai={hai} key={index} />;
+										} else {
+											return (
+												<div className="ml-4" key={index}>
+													<ViewTehai hai={hai} />
+												</div>
+											);
+										}
+									})}
+								</div>
+								{showData === null ? (
+									<>
+										{isLoading === true ? (
+											<>
+												<div className="text-white flex items-center ">
+													<span className="mt-10 text-xl">Score</span>
+												</div>
+												<p className="text-[200px] load">Loading</p>
+											</>
+										) : (
+											<>
+												<div className="text-white flex items-center ">
+													<span className="mt-10 text-xl">Select AI</span>
+												</div>
+												<div className="flex justify-between">
+													<div
+														onClick={() => handleAiNum(1)}
+														className={
+															num === 1
+																? "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#38b48b] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
+																: "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
+														}>
+														LLaMA
+													</div>
+													<div
+														onClick={() => handleAiNum(2)}
+														className={
+															num === 2
+																? "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#38b48b] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
+																: "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
+														}>
+														{" "}
+														chatGPT
+													</div>
+													<div
+														onClick={() => handleAiNum(3)}
+														className={
+															num === 3
+																? "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#38b48b] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
+																: "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
+														}>
+														{" "}
+														Gemini
+													</div>
+												</div>
+											</>
+										)}
+										<div className="">
+											{num === null ? (
+												<>
+													<button className="m-auto block mt-20 text-xl opacity-30 border border-gray-500 rounded-[20px] w-[200px] text-center p-[10px]">
+														和がる!!!
+													</button>
+												</>
+											) : (
+												<>
+													{isLoading === true ? (
+														<></>
+													) : (
+														<>
+															<AgariButton
+																onClickMethod={() => tryApi(playerTehai)}
+															/>
+														</>
+													)}
+												</>
+											)}
+										</div>
+									</>
+								) : (
+									<>
+										<div className="text-white flex items-center ">
+											<span className="mt-10 text-xl">Score</span>
+										</div>
+										<p className="text-[200px]">{showData}</p>
+										<Link
+											className="hover:bg-[#38b48b] duration-300 mt-10 border border-gray-700 p-[10px] w-[200px] text-center rounded-[20px]"
+											to="/">
+											home→
+										</Link>
+									</>
+								)}
+							</DialogHeader>
+						</DialogContent>
+					</Dialog>
 				</>
 			) : (
 				<>
 					<button
+						className="duration-200  hover:bg-[#38b48b] text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]"
 						onClick={() => {
 							startGame();
 						}}>
@@ -182,7 +293,9 @@ const Game = () => {
 			)}
 			<div
 				className={
-					addClass ? "opacity-100 duration-300" : "opacity-0 duration-300"
+					addClass
+						? "opacity-100 duration-300 flex"
+						: "opacity-0 duration-300 flex"
 				}>
 				<Player
 					tehai={playerTehai}
@@ -196,98 +309,6 @@ const Game = () => {
 				<Oponent tehai={oponent2Tehai} kawa={oponent2Kawa} />
 				<Oponent tehai={oponent3Tehai} kawa={oponent3Kawa} />
 			</div>
-
-			<Dialog>
-				<DialogTrigger>
-					<p>select AI</p>
-					<div>
-						{isLoading && (
-							<>
-								<p>loading</p>
-							</>
-						)}
-					</div>
-				</DialogTrigger>
-				<DialogContent className="bg-origin border-gray-900 min-w-[70%] p-20">
-					<DialogHeader className="w-full overflow-scroll">
-						<p className="text-white flex items-center">
-							<span className="text-xl">Tehai</span>
-						</p>
-						<div className="flex">
-							{playerTehai.map((hai, index) => {
-								if (index < 13) {
-									return <ViewTehai hai={hai} key={index} />;
-								} else {
-									return (
-										<div className="ml-4" key={index}>
-											<ViewTehai hai={hai} />
-										</div>
-									);
-								}
-							})}
-						</div>
-						{showData === null ? (
-							<>
-								<div className="text-white flex items-center ">
-									<span className="mt-10 text-xl">Select AI</span>
-								</div>
-								<div className="flex justify-between">
-									<div
-										onClick={() => handleAiNum(1)}
-										className={
-											num === 1
-												? "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-slate-500 cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
-												: "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
-										}>
-										LLaMA
-									</div>
-									<div
-										onClick={() => handleAiNum(2)}
-										className={
-											num === 2
-												? "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-slate-500 cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
-												: "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
-										}>
-										{" "}
-										chatGPT
-									</div>
-									<div
-										onClick={() => handleAiNum(3)}
-										className={
-											num === 3
-												? "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-slate-500 cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
-												: "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
-										}>
-										{" "}
-										xxxxx
-									</div>
-								</div>
-								{num === 0 ? (
-									<>
-										<button>agaru</button>
-									</>
-								) : (
-									<>
-										<AgariButton onClickMethod={() => tryApi(playerTehai)} />
-									</>
-								)}
-							</>
-						) : (
-							<>
-								<div className="text-white flex items-center ">
-									<span className="mt-10 text-xl">Score</span>
-								</div>
-								<p className="text-[200px]">{showData}</p>
-								<Link
-									className="mt-10 border border-gray-700 p-[10px] w-[200px] text-center rounded-[20px]"
-									to="/">
-									home→
-								</Link>
-							</>
-						)}
-					</DialogHeader>
-				</DialogContent>
-			</Dialog>
 		</div>
 	);
 };
