@@ -8,6 +8,7 @@ type rankingData = {
     id: number;
     score: number;
     user_name: string;
+    ai: string;
     updated_at: string;
     created_at: string;
 }
@@ -22,6 +23,7 @@ const defaultRankingDatas: rankingDatas = {
         id: 1,
         score: 10000,
         user_name: "user",
+        ai: "AI",
         updated_at: "2024",
         created_at: "2024",
     }],
@@ -30,6 +32,7 @@ const defaultRankingDatas: rankingDatas = {
         id: 1,
         score: 10000,
         user_name: "user",
+        ai: "AI",
         updated_at: "2024",
         created_at: "2024",
     }],
@@ -55,7 +58,7 @@ const Ranking = () => {
             console.log("error")
         }
     };
-    const a: string[] = ["a", "b", "c"];
+    
     useEffect(() => {
         getRanking();
     }, []);
@@ -69,6 +72,7 @@ const Ranking = () => {
                     return <div key={rankingData.id}>
                         <p>{rankingData.user_name}</p>
                         <p>{rankingData.score}</p>
+                        <p>{rankingData.ai}</p>
                         <div>{ rankingData.hand.split(',').map((hand, index) => {
                             const haiInfo: HaiInfo = {kind: Number(hand[0]), number: Number(hand[1])}
                             return <Hai hai={haiInfo} key={index} />
