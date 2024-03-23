@@ -5,6 +5,7 @@ import Home from "./Home";
 import Test from "./Test";
 
 import Game from "./components/game/Game";
+import Ranking from "./components/game/Ranking";
 
 function App() {
 	return (
@@ -13,6 +14,7 @@ function App() {
 				<Route path="/" element={<Home />} />
 				<Route path="/test" element={<Test />} />
 				<Route path="/game" element={<Game />} />
+				<Route path="/ranking" element={<Ranking />} />
 			</Routes>
 		</>
 	);
