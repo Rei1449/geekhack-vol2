@@ -12,7 +12,9 @@ const Oponent: React.VFC<Props> = ({ tehai, kawa, rotate = 0 }) => {
 	return (
 		<div className={"m-4 duration-500 rotate-" + rotate}>
 			<Kawa kawa={kawa} />
-			<OponentTehai tehai={tehai} />
+			<div className="hidden">
+				<OponentTehai tehai={tehai} />
+			</div>
 		</div>
 	);
 };

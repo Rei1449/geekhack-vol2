@@ -5,10 +5,17 @@
 /* .origin-rotate {
 	transform: rotate3d(0, 1, 0.1, 3.142rad);
 } */
+body {
+	font-family: "Nova Square", sans-serif;
+	color: white;
+}
 .origin-middle {
 	left: 45%;
 	top: 60%;
 	transform: translateX(-50%) translateY(-50%);
+}
+.bg-origin {
+	background: linear-gradient(to right, black, #0f0021, #2e0264);
 }
 @layer base {
 	:root {
