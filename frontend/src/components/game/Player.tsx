@@ -11,7 +11,10 @@ interface Props {
 const Player: React.VFC<Props> = ({ tehai, kawa, discardMethod }) => {
 	return (
 		<div className="m-4">
-			<Kawa kawa={kawa} />
+			<div className="fixed top-[50%] left-[50%]">
+				<Kawa kawa={kawa} />
+			</div>
+
 			<PlayerTehai tehai={tehai} discardMethod={discardMethod} />
 		</div>
 	);
