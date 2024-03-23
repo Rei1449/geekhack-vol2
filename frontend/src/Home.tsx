@@ -1,28 +1,55 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "./dialog";
+import type { ResultData } from "./types/ResultData";
+import { ENDPOINT_URL, UNDEFINED_RESULT_DATA } from "./components/game/Constants";
+import type { HaiInfo } from "./types/HaiInfo";
+import Hai from "./components/game/Hai";
 
 export default function Home() {
-	interface UserData {
-		id: number;
-		user_name: string;
-		hand: string;
-		score: number;
-		created_at: string;
-		updated_at: string;
-	}
-	const getRecord = async () => {
-		const res = await fetch("http://localhost:8080/user/string");
+	// interface UserData {
+	// 	id: number;
+	// 	user_name: string;
+	// 	hand: string;
+	// 	score: number;
+	// 	created_at: string;
+	// 	updated_at: string;
+	// }
+	// const getRecord = async () => {
+	// 	const res = await fetch("http://localhost:8080/user/string");
+	// 	if (res.ok) {
+	// 		const data = await res.json();
+	// 		console.log(data);
+	// 		setUserData(data);
+	// 	}
+	// };
+	// useEffect(() => {
+	// 	getRecord();
+	// }, []);
+	// const [userData, setUserData] = useState([]);
+	const [isLoadingUserResults, setIsLoadingUserResults] = useState<boolean>(true);
+	const [userResults, setUserResults] = useState<ResultData[]>([UNDEFINED_RESULT_DATA]);
+	const getUserResults = async (userName: string) => {
+		setIsLoadingUserResults(true);
+		const res = await fetch(ENDPOINT_URL+"user/"+userName, {
+			method: "Get",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
 		if (res.ok) {
 			const data = await res.json();
 			console.log(data);
-			setUserData(data);
+			setIsLoadingUserResults(false);
+			setUserResults(data);
+		} else {
+			console.log("error");
 		}
 	};
 	useEffect(() => {
-		getRecord();
-	}, []);
-	const [userData, setUserData] = useState([]);
+        getUserResults("user");
+    }, []);
+	
 	return (
 		<div className="w-screen h-screen bg-[#151515]">
 			<div className="flex items-center justify-between px-10 pt-10">
@@ -42,13 +69,24 @@ export default function Home() {
 							</DialogTrigger>
 							<DialogContent className="bg-origin border-gray-800 min-w-[70%] p-20 max-h-[600px] h-[80%]">
 								<DialogHeader>
-									{userData.map((data: UserData) => (
+									{isLoadingUserResults? 
+									(<p>読み込み中</p>) : (
+										userResults.map((data: ResultData) => (
 										<div key={data.id} className="">
+											<p>{data.user_name}</p>
 											<p className="mt-5">{data.score}</p>
-											<p></p>
+											<p>{data.ai}</p>
+											<div className="flex">{ data.hand.split(',').map((hand, index) => {
+												const haiInfo: HaiInfo = {kind: Number(hand[0]), number: Number(hand[1])}
+												return <Hai hai={haiInfo} key={index} />
+											}) }
+											</div>
 										</div>
-									))}
+									)))}
 								</DialogHeader>
+								<div>
+									
+								</div>
 							</DialogContent>
 						</Dialog>
 						<Link

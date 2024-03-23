@@ -83,7 +83,7 @@ const Game = () => {
 		setOponent2Kawa([...oponent2Kawa, popYama()]);
 		setOponent3Kawa([...oponent3Kawa, popYama()]);
 		if (yama.length == 0) {
-			window.alert("Game End");
+			tryApi(playerTehai);
 		}
 		tumo();
 	};
