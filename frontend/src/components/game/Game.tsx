@@ -43,22 +43,12 @@ const makeYama = (): HaiInfo[] => {
 	return ShuffleArray(yama);
 };
 
-// const agari = (tehai: HaiInfo[]): void => {
-// 	const stringTehai: string[] = [];
-// 	SortHaiArray(tehai);
-// 	tehai.map((hai) => {
-// 		stringTehai.push(GetHaiName(hai));
-// 	});
-// 	console.log(stringTehai);
-// };
-
 const Game = () => {
 	const [yama, setYama] = useState<HaiInfo[]>([]);
 	const popYama = (): HaiInfo => {
 		const lastHai: HaiInfo | undefined = yama.pop();
 		const newYama = [...yama];
 		setYama(newYama);
-		// console.log("popYama")
 		return lastHai || { kind: -1, number: -1 };
 	};
 	const [playerTehai, setPlayerTehai] = useState<HaiInfo[]>([]);
@@ -126,7 +116,7 @@ const Game = () => {
 
 	// ゲーム結果を計算
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [showData, setShowData] = useState<number>(0);
+	const [showData, setShowData] = useState<number | null>(null);
 	const [num, setNum] = useState(0);
 	const handleAiNum = (num: number) => {
 		setNum(num);
@@ -238,7 +228,7 @@ const Game = () => {
 								}
 							})}
 						</div>
-						{showData === 0 ? (
+						{showData === null ? (
 							<>
 								<div className="text-white flex items-center ">
 									<span className="mt-10 text-xl">Select AI</span>

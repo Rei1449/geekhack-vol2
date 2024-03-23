@@ -5,6 +5,8 @@ import Home from "./Home";
 import Test from "./Test";
 
 import Game from "./components/game/Game";
+import Rule from "./Rule/Rule";
+import User from "./User/User";
 
 function App() {
 	return (
@@ -13,6 +15,8 @@ function App() {
 				<Route path="/" element={<Home />} />
 				<Route path="/test" element={<Test />} />
 				<Route path="/game" element={<Game />} />
+				<Route path="/rule" element={<Rule />} />
+				<Route path="/user" element={<User />} />
 			</Routes>
 		</>
 	);
