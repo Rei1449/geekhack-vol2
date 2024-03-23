@@ -17,6 +17,25 @@ body {
 .bg-origin {
 	background: linear-gradient(to right, black, #0f0021, #2e0264);
 }
+.load {
+	background: -webkit-linear-gradient(0deg, #5c5c5c, #2d2d2d);
+	background-size: 280%;
+	animation: 2s infinite bgknightgradient;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+@keyframes bgknightgradient {
+	0% {
+		background-position: 0 0%;
+	}
+
+	50% {
+		background-position: 100% 0%;
+	}
+	100% {
+		background-position: 0% 0%;
+	}
+}
 @layer base {
 	:root {
 		--background: 0 0% 100%;
