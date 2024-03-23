@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "./dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "./dialog";
 
 export default function Home() {
 	interface UserData {
