@@ -74,5 +74,5 @@ def get_score_user(session, user_name:str):
     user_info = session.query(User).filter(User.name == f"{user_name}").all()
     if not user_info:
         return {"error":"ユーザーの情報が見つかりませんでした。"}
-    results = session.query(Score).filter(Score.user_name == f"{user_name}").order_by(Score.created_at).all()
+    results = session.query(Score).filter(Score.user_name == f"{user_name}").order_by(Score.created_at.desc()).all()
     return results
