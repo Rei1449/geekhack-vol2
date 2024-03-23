@@ -1,8 +1,18 @@
-import { ENDPOINT_URL } from "./Constants";
+import { ENDPOINT_URL, UNDEFINED_RESULT_DATA } from "./Constants";
 import { useEffect, useState } from "react";
 import Hai from "./Hai";
 import { HaiInfo } from "../../types/HaiInfo";
+import type { ResultData } from "../../types/ResultData";
 
+type rankingDatas = {
+    high: ResultData[];
+    low: ResultData[];
+}
+
+const defaultRankingDatas: rankingDatas = {
+    high: [UNDEFINED_RESULT_DATA],
+    low: [UNDEFINED_RESULT_DATA],
+}
 type rankingData = {
 	hand: string;
 	id: number;
