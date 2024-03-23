@@ -13,3 +13,4 @@ requests>=2.21.0
 openai==0.28
 DateTime
 replicate
+google-generativeai

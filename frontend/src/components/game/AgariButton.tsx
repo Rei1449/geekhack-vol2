@@ -1,13 +1,13 @@
-import { Button } from "../ui/button"
-
 interface Props {
-    onClickMethod : () => void
+	onClickMethod: () => void;
 }
 
-const AgariButton : React.VFC<Props> = ({onClickMethod}) => {
-    return (
-        <Button onClick={onClickMethod}>あがり</Button>
-    )
-}
+const AgariButton: React.VFC<Props> = ({ onClickMethod }) => {
+	return (
+		<button className="w-[200px] focus:border-none" onClick={onClickMethod}>
+			あがり
+		</button>
+	);
+};
 
-export default AgariButton
+export default AgariButton;

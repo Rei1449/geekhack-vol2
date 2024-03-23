@@ -11,9 +11,9 @@ const Kawa: React.VFC<Props> = ({ kawa }) => {
 		splitKawa.push(kawa.slice(i * 6, i * 6 + 6));
 	}
 	return (
-		<div className="mb-4 fixed origin-middle">
+		<div className="mb-4">
 			{splitKawa.map((kawa, i) => (
-				<div className="flex opacity-75" key={i}>
+				<div className="flex opacity-85" key={i}>
 					{kawa.map((hai, j) => (
 						<Hai hai={hai} key={j} />
 					))}

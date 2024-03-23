@@ -20,6 +20,9 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "../../dialog";
+import HaiInPlayerTehai from "./HaiInPlayerTehai";
+import ViewTehai from "./ViewTehai";
+import { Link } from "react-router-dom";
 
 const makeYama = (): HaiInfo[] => {
 	const yama: HaiInfo[] = [];
@@ -40,22 +43,12 @@ const makeYama = (): HaiInfo[] => {
 	return ShuffleArray(yama);
 };
 
-// const agari = (tehai: HaiInfo[]): void => {
-// 	const stringTehai: string[] = [];
-// 	SortHaiArray(tehai);
-// 	tehai.map((hai) => {
-// 		stringTehai.push(GetHaiName(hai));
-// 	});
-// 	console.log(stringTehai);
-// };
-
 const Game = () => {
 	const [yama, setYama] = useState<HaiInfo[]>([]);
 	const popYama = (): HaiInfo => {
 		const lastHai: HaiInfo | undefined = yama.pop();
 		const newYama = [...yama];
 		setYama(newYama);
-		// console.log("popYama")
 		return lastHai || { kind: -1, number: -1 };
 	};
 	const [playerTehai, setPlayerTehai] = useState<HaiInfo[]>([]);
@@ -123,8 +116,11 @@ const Game = () => {
 
 	// ゲーム結果を計算
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [showData, setShowData] = useState([]);
-
+	const [showData, setShowData] = useState<number | null>(null);
+	const [num, setNum] = useState(0);
+	const handleAiNum = (num: number) => {
+		setNum(num);
+	};
 	const tryApi = async (tehai: HaiInfo[]) => {
 		setIsLoading(true);
 		const stringTehai: string[] = [];
@@ -132,16 +128,13 @@ const Game = () => {
 		tehai.map((hai) => {
 			stringTehai.push(GetHaiName(hai));
 		});
-		const res = await fetch(
-			"https://hack-fast-api-65ce6a3d3ac6.herokuapp.com/tumo",
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ arr: stringTehai }),
-			}
-		);
+		const res = await fetch(`http://localhost:8080/api/${num}`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ arr: stringTehai }),
+		});
 		if (res.ok) {
 			const data = await res.json();
 			console.log(data);
@@ -200,7 +193,7 @@ const Game = () => {
 				/>
 			</div>
 
-			<div className="hidden">
+			<div className="">
 				<Oponent tehai={oponent1Tehai} kawa={oponent1Kawa} />
 				<Oponent tehai={oponent2Tehai} kawa={oponent2Kawa} />
 				<Oponent tehai={oponent3Tehai} kawa={oponent3Kawa} />
@@ -208,7 +201,7 @@ const Game = () => {
 
 			<Dialog>
 				<DialogTrigger>
-					<p>AIを選択する</p>
+					<p>select AI</p>
 					<div>
 						{isLoading && (
 							<>
@@ -217,17 +210,86 @@ const Game = () => {
 						)}
 					</div>
 				</DialogTrigger>
-				<DialogContent>
-					<DialogHeader>
-						<DialogTitle>
-							<AgariButton onClickMethod={() => tryApi(playerTehai)} />
-						</DialogTitle>
-						<DialogDescription>{showData}</DialogDescription>
+				<DialogContent className="bg-origin border-gray-900 min-w-[70%] p-20">
+					<DialogHeader className="w-full overflow-scroll">
+						<p className="text-white flex items-center">
+							<span className="text-xl">Tehai</span>
+						</p>
+						<div className="flex">
+							{playerTehai.map((hai, index) => {
+								if (index < 13) {
+									return <ViewTehai hai={hai} key={index} />;
+								} else {
+									return (
+										<div className="ml-4" key={index}>
+											<ViewTehai hai={hai} />
+										</div>
+									);
+								}
+							})}
+						</div>
+						{showData === null ? (
+							<>
+								<div className="text-white flex items-center ">
+									<span className="mt-10 text-xl">Select AI</span>
+								</div>
+								<div className="flex justify-between">
+									<div
+										onClick={() => handleAiNum(1)}
+										className={
+											num === 1
+												? "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-slate-500 cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
+												: "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
+										}>
+										LLaMA
+									</div>
+									<div
+										onClick={() => handleAiNum(2)}
+										className={
+											num === 2
+												? "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-slate-500 cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
+												: "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
+										}>
+										{" "}
+										chatGPT
+									</div>
+									<div
+										onClick={() => handleAiNum(3)}
+										className={
+											num === 3
+												? "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-slate-500 cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
+												: "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
+										}>
+										{" "}
+										xxxxx
+									</div>
+								</div>
+								{num === 0 ? (
+									<>
+										<button>agaru</button>
+									</>
+								) : (
+									<>
+										<AgariButton onClickMethod={() => tryApi(playerTehai)} />
+									</>
+								)}
+							</>
+						) : (
+							<>
+								<div className="text-white flex items-center ">
+									<span className="mt-10 text-xl">Score</span>
+								</div>
+								<p className="text-[200px]">{showData}</p>
+								<Link
+									className="mt-10 border border-gray-700 p-[10px] w-[200px] text-center rounded-[20px]"
+									to="/">
+									home→
+								</Link>
+							</>
+						)}
 					</DialogHeader>
 				</DialogContent>
 			</Dialog>
-
-			<p>yama.length: {yama.length}</p>
 		</div>
 	);
 };
