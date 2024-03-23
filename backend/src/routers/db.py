@@ -32,9 +32,9 @@ class User(BaseModel):
   password: str
 
 class Store(BaseModel):
-    user_name:str
-    score:int
-    arr:List
+  user_name: str
+  score: int
+  arr:List
 
 # セッションファクトリを作成
 Session = sessionmaker(autocommit=False, autoflush=False, bind=Engine)
@@ -57,7 +57,11 @@ def login_user(user: User, db:Session = Depends(get_db)):
 
 @router.get("/ranking")
 def get_score(db:Session = Depends(get_db)):
-  return crud.get_score(db)
+  return crud.get_score_ranking(db)
+
+@router.get("/user/{user_name}")
+def get_score_user(user_name:str, db:Session = Depends(get_db)):
+  return crud.get_score_user(db, user_name)
 
 @router.post("/store")
 def store_score(store:Store, db:Session = Depends(get_db)):

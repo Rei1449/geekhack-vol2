@@ -16,6 +16,7 @@ from src.db.model import Engine
 
 import requests
 import replicate
+import openai
 
 import re
 
@@ -34,7 +35,7 @@ def get_db():
 class Data(BaseModel):
     arr:List
 
-@router.post("/api/llama")
+@router.post("/api/1")
 def try_llama(data: Data, db:Session = Depends(get_db)):
     res = replicate.run(
         "meta/llama-2-13b-chat",
@@ -71,9 +72,9 @@ def try_llama(data: Data, db:Session = Depends(get_db)):
         if index + 1 == len(result):
             scores += int(tmp)
 
-    return score
+    return scores
 
-@router.post("/api/chatgpt")
+@router.post("/api/2")
 async def try_api(data:Data):
     openai.api_key = os.environ["CHATGPT_API_KEY"]
     prompt = [

@@ -36,11 +36,14 @@ def get_user(session, user_name:str, user_password: str):
     login_pass_hash.update(user_password.encode())
     print("a")
     if user_info[0].password == login_pass_hash.hexdigest():
-        return user_info[0]
+        return user_name
     else:
         return "パスワードが間違っています"
 
-def register_score(session, user_name:str, score:int, hand:str):
+def register_score(session, user_name:str, score:int, hand_arr:str):
+    hand = hand_arr[0]
+    for i in data.arr[1:]:
+        hand += "," + i
     score_obj = Score(
         user_name =  user_name,
         score = score,
@@ -54,8 +57,15 @@ def register_score(session, user_name:str, score:int, hand:str):
     session.refresh(score_obj)
     return "結果が保存されました"
 
-def get_score(session):
+def get_score_ranking(session):
     low_scores = session.query(Score).order_by(Score.score).limit(3).all()
     high_scores = session.query(Score).order_by(Score.score.desc()).limit(3).all()
     score_ranking = {"high":high_scores, "low":low_scores}
     return score_ranking
+
+def get_score_user(session, user_name):
+    user_info = session.query(User).filter(User.name == f"{user_name}").all()
+    if not user_info:
+        return "入力されたユーザー名は見つかりませんでした。"
+    results = session.query(Score).filter(Score.user_name == f"{user_name}").order_by(Score.created_at).all()
+    return results
