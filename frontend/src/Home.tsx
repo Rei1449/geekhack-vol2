@@ -1,13 +1,14 @@
 import { Key, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ENDPOINT_URL } from "./components/game/Constants";
 import Hai from "./components/game/Hai";
 
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "./dialog";
 import type { ResultData } from "./types/ResultData";
-import { ENDPOINT_URL, UNDEFINED_RESULT_DATA } from "./components/game/Constants";
+import {
+	ENDPOINT_URL,
+	UNDEFINED_RESULT_DATA,
+} from "./components/game/Constants";
 import type { HaiInfo } from "./types/HaiInfo";
-import Hai from "./components/game/Hai";
 
 type rankingData = {
 	hand: string;
@@ -69,11 +70,14 @@ export default function Home() {
 	// 	getRecord();
 	// }, []);
 	// const [userData, setUserData] = useState([]);
-	const [isLoadingUserResults, setIsLoadingUserResults] = useState<boolean>(true);
-	const [userResults, setUserResults] = useState<ResultData[]>([UNDEFINED_RESULT_DATA]);
+	const [isLoadingUserResults, setIsLoadingUserResults] =
+		useState<boolean>(true);
+	const [userResults, setUserResults] = useState<ResultData[]>([
+		UNDEFINED_RESULT_DATA,
+	]);
 	const getUserResults = async (userName: string) => {
 		setIsLoadingUserResults(true);
-		const res = await fetch(ENDPOINT_URL+"user/"+userName, {
+		const res = await fetch(ENDPOINT_URL + "user/" + userName, {
 			method: "Get",
 			headers: {
 				"Content-Type": "application/json",
@@ -88,16 +92,14 @@ export default function Home() {
 			console.log("error");
 		}
 	};
-	useEffect(() => {
-        getUserResults("user");
-    }, []);
-	
-		getRecord();
-	}, []);
-	const [userData, setUserData] = useState([]);
+	// useEffect(() => {
+	// 	getUserResults("user");
+	// }, []);
+
+	//const [userData, setUserData] = useState([]);
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [rankingDatas, SetRankingData] =
+	const [stateRankingDatas, SetRankingData] =
 		useState<rankingDatas>(defaultRankingDatas);
 	const getRanking = async () => {
 		setIsLoading(true);
@@ -115,6 +117,7 @@ export default function Home() {
 	};
 
 	useEffect(() => {
+		getUserResults("user");
 		getRanking();
 	}, []);
 	return (
@@ -125,7 +128,7 @@ export default function Home() {
 						<p>ロード中</p>
 					) : (
 						<>
-							{rankingDatas.high.map((rankingData: any) => {
+							{stateRankingDatas.high.map((rankingData: any) => {
 								return (
 									<div key={rankingData.id}>
 										<div className="flex items-center">
@@ -147,7 +150,7 @@ export default function Home() {
 									</div>
 								);
 							})}
-							{rankingDatas.low.map((rankingData: any) => {
+							{stateRankingDatas.low.map((rankingData: any) => {
 								return (
 									<div key={rankingData.id}>
 										<p>{rankingData.user_name}</p>
@@ -185,24 +188,28 @@ export default function Home() {
 							</DialogTrigger>
 							<DialogContent className="bg-origin border-gray-800 min-w-[70%] p-20 max-h-[600px] h-[80%]">
 								<DialogHeader>
-									{isLoadingUserResults? 
-									(<p>読み込み中</p>) : (
+									{isLoadingUserResults ? (
+										<p>読み込み中</p>
+									) : (
 										userResults.map((data: ResultData) => (
-										<div key={data.id} className="">
-											<p>{data.user_name}</p>
-											<p className="mt-5">{data.score}</p>
-											<p>{data.ai}</p>
-											<div className="flex">{ data.hand.split(',').map((hand, index) => {
-												const haiInfo: HaiInfo = {kind: Number(hand[0]), number: Number(hand[1])}
-												return <Hai hai={haiInfo} key={index} />
-											}) }
+											<div key={data.id} className="">
+												<p>{data.user_name}</p>
+												<p className="mt-5">{data.score}</p>
+												<p>{data.ai}</p>
+												<div className="flex">
+													{data.hand.split(",").map((hand, index) => {
+														const haiInfo: HaiInfo = {
+															kind: Number(hand[0]),
+															number: Number(hand[1]),
+														};
+														return <Hai hai={haiInfo} key={index} />;
+													})}
+												</div>
 											</div>
-										</div>
-									)))}
+										))
+									)}
 								</DialogHeader>
-								<div>
-									
-								</div>
+								<div></div>
 							</DialogContent>
 						</Dialog>
 						<Link
