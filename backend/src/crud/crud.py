@@ -52,7 +52,7 @@ def register_score(session, user_name:str, score:int, hand:str):
         raise HTTPException(status_code=500, detail='error')
     session.commit()
     session.refresh(score_obj)
-    return score_obj.score
+    return "結果が保存されました"
 
 def get_score(session):
     low_scores = session.query(Score).order_by(Score.score).limit(3).all()
