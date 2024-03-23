@@ -42,7 +42,7 @@ def get_user(session, user_name:str, user_password: str):
 
 def register_score(session, user_name:str, score:int, hand_arr:str):
     hand = hand_arr[0]
-    for i in data.arr[1:]:
+    for i in hand_arr[1:]:
         hand += "," + i
     score_obj = Score(
         user_name =  user_name,
