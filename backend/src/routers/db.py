@@ -65,4 +65,4 @@ def get_score_user(user_name:str, db:Session = Depends(get_db)):
 
 @router.post("/store")
 def store_score(store:Store, db:Session = Depends(get_db)):
-  return crud.register_score(db, store.user_name, store.score, store,arr)
+  return crud.register_score(db, store.user_name, store.score, store.arr)
