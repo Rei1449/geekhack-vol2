@@ -15,4 +15,5 @@ alembic upgrade head
 4.postgresql内に入り、テーブルが作成されているかの確認をする(下記コマンドで確認できる)
 
 docker-compose exec db psql -U postgres
+
 \d
