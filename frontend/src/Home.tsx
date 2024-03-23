@@ -31,13 +31,13 @@ export default function Home() {
 					<h1 className="text-[200px] text-[#9c4efb]">Three</h1>
 					<div className="m-auto ">
 						<Link
-							className="text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]"
+							className="duration-200  hover:bg-[#38b48b] text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]"
 							to="/game">
 							Play Three →
 						</Link>
 
 						<Dialog>
-							<DialogTrigger className="mt-5 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
+							<DialogTrigger className="duration-200  hover:bg-[#38b48b] mt-5 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
 								show record →
 							</DialogTrigger>
 							<DialogContent className="bg-origin border-gray-800 min-w-[70%] p-20 max-h-[600px] h-[80%]">
@@ -52,7 +52,7 @@ export default function Home() {
 							</DialogContent>
 						</Dialog>
 						<Link
-							className="mt-5 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]"
+							className="duration-200  hover:bg-[#38b48b] mt-5 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]"
 							to="/rule">
 							Three's rule →
 						</Link>
