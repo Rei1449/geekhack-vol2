@@ -142,30 +142,30 @@ const Game = () => {
 			console.log("error");
 		}
 	};
-	useEffect(() => {
-		VANTA.DOTS({
-			el: "#game",
-			mouseControls: true,
-			touchControls: true,
-			gyroControls: false,
-			minHeight: 200.0,
-			minWidth: 200.0,
-			scale: 1.0,
-			scaleMobile: 1.0,
-			color: 0x6e20ff,
-			color2: 0x6e20ff,
-			size: 3,
-			spacing: 14.0,
-			showLines: false,
-		});
-	}, []);
+	// useEffect(() => {
+	// 	VANTA.DOTS({
+	// 		el: "#game",
+	// 		mouseControls: true,
+	// 		touchControls: true,
+	// 		gyroControls: false,
+	// 		minHeight: 200.0,
+	// 		minWidth: 200.0,
+	// 		scale: 1.0,
+	// 		scaleMobile: 1.0,
+	// 		color: 0x6e20ff,
+	// 		color2: 0x6e20ff,
+	// 		size: 3,
+	// 		spacing: 14.0,
+	// 		showLines: false,
+	// 	});
+	// }, []);
 	const [addClass, setAddClass] = useState<boolean>(false);
 	// const timeoutId = setTimeout(() => {
 	// 	setAddClass(true);
 	// }, 700);
 
 	return (
-		<div id="game" className="w-screen h-screen">
+		<div id="game" className="w-screen h-screen bg-[#333333]">
 			{isGame ? (
 				<>
 					<p>ゲーム中</p>
