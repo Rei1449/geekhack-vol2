@@ -15,12 +15,10 @@ import { UNDEFINED_HAI } from "./Constants.tsx";
 import {
 	Dialog,
 	DialogContent,
-	DialogDescription,
 	DialogHeader,
-	DialogTitle,
 	DialogTrigger,
 } from "../../dialog";
-import HaiInPlayerTehai from "./HaiInPlayerTehai";
+
 import ViewTehai from "./ViewTehai";
 import { Link } from "react-router-dom";
 
