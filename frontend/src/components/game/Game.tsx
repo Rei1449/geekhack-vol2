@@ -10,7 +10,7 @@ import {
 	IsSameHai,
 	SortHaiArray,
 } from "./CommonMethods.tsx";
-import { UNDEFINED_HAI } from "./Constants.tsx";
+import { ENDPOINT_URL, UNDEFINED_HAI, aiNames } from "./Constants.tsx";
 
 import {
 	Dialog,
@@ -112,6 +112,8 @@ const Game = () => {
 		setopOponent3Tehai(newOponent3Tehai);
 	};
 
+
+
 	// ゲーム結果を計算
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [showData, setShowData] = useState<number | null>(null);
@@ -163,6 +165,32 @@ const Game = () => {
 	// const timeoutId = setTimeout(() => {
 	// 	setAddClass(true);
 	// }, 700);
+
+		// データベースに結果を保存する
+		const saveResult = async (tehai: HaiInfo[]) => {
+		const tehaiForDB : string[] = [];
+		tehai.map((hai) => {
+			tehaiForDB.push(String(hai.kind)+String(hai.number));
+		})
+		const res = await fetch(ENDPOINT_URL + "store", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ 
+				user_name: "user",
+				score: showData,
+				arr: tehaiForDB,
+				ai: aiNames[num],
+				}),
+		});
+		if (res.ok) {
+			const data = await res.json();
+			console.log(data);
+		} else {
+			console.log("error");
+		}
+	}
 
 	return (
 		<div id="game" className="w-screen h-screen bg-[#333333]">
@@ -283,6 +311,9 @@ const Game = () => {
 									to="/">
 									home→
 								</Link>
+								<button onClick={() => {saveResult(playerTehai)}}>
+									結果を保存
+								</button>
 							</>
 						)}
 					</DialogHeader>
