@@ -1,6 +1,6 @@
 import "../../index.css";
 import type { HaiInfo } from "../../types/HaiInfo.tsx";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Player from "./Player.tsx";
 import Oponent from "./Oponent.tsx";
 import AgariButton from "./AgariButton.tsx";
