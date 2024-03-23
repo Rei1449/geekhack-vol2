@@ -1,6 +1,6 @@
 import "../../index.css";
 import type { HaiInfo } from "../../types/HaiInfo.tsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Player from "./Player.tsx";
 import Oponent from "./Oponent.tsx";
 import AgariButton from "./AgariButton.tsx";
@@ -21,6 +21,7 @@ import {
 
 import ViewTehai from "./ViewTehai";
 import { Link } from "react-router-dom";
+import UnTurnHai from "./UnTurnHai";
 
 const makeYama = (): HaiInfo[] => {
 	const yama: HaiInfo[] = [];
@@ -75,21 +76,38 @@ const Game = () => {
 		}
 		return false;
 	};
-
+	const [lock, setLock] = useState(false);
 	const progressTurn = (discardHai: HaiInfo): void => {
+		setLock(true);
 		discard(discardHai);
 		// cpuはつもぎり
-		setOponent1Kawa([...oponent1Kawa, popYama()]);
-		setOponent2Kawa([...oponent2Kawa, popYama()]);
-		setOponent3Kawa([...oponent3Kawa, popYama()]);
+		setTimeout(() => {
+			setLock(true);
+			setOponent1Kawa([...oponent1Kawa, popYama()]);
+		}, 2000);
+		setTimeout(() => {
+			setLock(true);
+			setOponent2Kawa([...oponent2Kawa, popYama()]);
+		}, 4000);
+		setTimeout(() => {
+			setLock(true);
+			setOponent3Kawa([...oponent3Kawa, popYama()]);
+		}, 6000);
+
 		if (yama.length == 0) {
 			tryApi(playerTehai);
 		}
-		tumo();
+		setTimeout(() => {
+			setLock(true);
+			tumo();
+			setLock(false);
+		}, 7000);
 	};
 	const [isGame, setIsGame] = useState(false);
 	const startGame = (): void => {
-		setAddClass(true);
+		setTimeout(() => {
+			setAddClass(true);
+		}, 1000);
 		setIsGame(true);
 		const newYama = makeYama();
 		const newPlayerTehai: HaiInfo[] = [];
@@ -144,9 +162,7 @@ const Game = () => {
 	};
 
 	const [addClass, setAddClass] = useState<boolean>(false);
-	// const timeoutId = setTimeout(() => {
-	// 	setAddClass(true);
-	// }, 700);
+
 	const [isSuc, setIsSuc] = useState();
 	const [isSaveLoad, setSaveLoad] = useState(false);
 
@@ -178,13 +194,15 @@ const Game = () => {
 			console.log("error");
 		}
 	};
-
+	useEffect(() => {
+		startGame();
+	}, []);
 	return (
 		<div id="game" className="w-screen h-screen bg-[#151515] p-10">
 			{isGame ? (
 				<>
 					<Dialog>
-						<DialogTrigger className="duration-200  hover:bg-[#38b48b] text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
+						<DialogTrigger className="duration-200 hover:bg-[#38b48b] text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
 							{isGame && (
 								<>
 									<p className="">select AI</p>
@@ -330,17 +348,35 @@ const Game = () => {
 						? "opacity-100 duration-300 flex"
 						: "opacity-0 duration-300 flex"
 				}>
-				<Player
-					tehai={playerTehai}
-					kawa={playerKawa}
-					discardMethod={progressTurn}
-				/>
+				{lock === true ? (
+					<>
+						<UnTurnHai
+							tehai={playerTehai}
+							kawa={playerKawa}
+							// discardMethod={progressTurn}
+						/>
+					</>
+				) : (
+					<>
+						<Player
+							tehai={playerTehai}
+							kawa={playerKawa}
+							discardMethod={progressTurn}
+						/>
+					</>
+				)}
 			</div>
 
 			<div className="">
-				<Oponent tehai={oponent1Tehai} kawa={oponent1Kawa} />
-				<Oponent tehai={oponent2Tehai} kawa={oponent2Kawa} />
-				<Oponent tehai={oponent3Tehai} kawa={oponent3Kawa} />
+				<div className="fixed right-[5%]">
+					<Oponent tehai={oponent1Tehai} kawa={oponent1Kawa} />
+				</div>
+				<div className="fixed top-[5%] left-[50%]">
+					<Oponent tehai={oponent2Tehai} kawa={oponent2Kawa} />
+				</div>
+				<div className="fixed">
+					<Oponent tehai={oponent3Tehai} kawa={oponent3Kawa} />
+				</div>
 			</div>
 		</div>
 	);
