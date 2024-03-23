@@ -202,13 +202,30 @@ const Game = () => {
 			{isGame ? (
 				<>
 					<Dialog>
-						<DialogTrigger className="duration-200 hover:bg-[#38b48b] text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
-							{isGame && (
+						<>
+							{lock ? (
 								<>
-									<p className="">select AI</p>
+									<div className="duration-200 opacity-20 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
+										{isGame && (
+											<>
+												<p className="">select AI</p>
+											</>
+										)}
+									</div>
+								</>
+							) : (
+								<>
+									<DialogTrigger className="duration-200 hover:bg-[#38b48b] text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
+										{isGame && (
+											<>
+												<p className="">select AI</p>
+											</>
+										)}
+									</DialogTrigger>
 								</>
 							)}
-						</DialogTrigger>
+						</>
+
 						<DialogContent className="bg-origin border-gray-800 min-w-[70%] min-h-[80%] p-20">
 							<DialogHeader className="w-full overflow-x-scroll">
 								<p className="text-white flex items-center">
