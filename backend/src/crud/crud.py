@@ -40,7 +40,7 @@ def get_user(session, user_name:str, user_password: str):
     else:
         return {"error":"パスワードが間違っています"}
 
-def register_score(session, user_name:str, score:int, hand_arr:str):
+def register_score(session, user_name:str, score:int, hand_arr:str, ai:str):
     hand = hand_arr[0]
     for i in hand_arr[1:]:
         hand += "," + i
@@ -48,6 +48,7 @@ def register_score(session, user_name:str, score:int, hand_arr:str):
         user_name =  user_name,
         score = score,
         hand = hand,
+        ai = ai,
     )
     try:
         session.add(score_obj)
@@ -58,12 +59,18 @@ def register_score(session, user_name:str, score:int, hand_arr:str):
     return {"success":"結果が保存されました"}
 
 def get_score_ranking(session):
-    low_scores = session.query(Score).order_by(Score.score).limit(3).all()
-    high_scores = session.query(Score).order_by(Score.score.desc()).limit(3).all()
+    low_scores = session.query(Score).order_by(Score.score).limit(5).all()
+    high_scores = session.query(Score).order_by(Score.score.desc()).limit(5).all()
     score_ranking = {"high":high_scores, "low":low_scores}
     return score_ranking
 
-def get_score_user(session, user_name):
+def get_score_ranking_ai(session, ai:str):
+    low_scores = session.query(Score).filter(Score.ai == f"{ai}").order_by(Score.score).limit(3).all()
+    high_scores = session.query(Score).filter(Score.ai == f"{ai}").order_by(Score.score.desc()).limit(3).all()
+    score_ranking = {"high":high_scores, "low":low_scores}
+    return score_ranking
+
+def get_score_user(session, user_name:str):
     user_info = session.query(User).filter(User.name == f"{user_name}").all()
     if not user_info:
         return {"error":"ユーザーの情報が見つかりませんでした。"}
