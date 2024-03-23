@@ -39,3 +39,4 @@ class Score(Base):
     created_at = Column(DateTime, default=datetime.now, nullable=False)
     updated_at = Column(DateTime, default=datetime.now, nullable=False)
     users = relationship("User", back_populates="scores")
+    ai = Column(String(50), nullable=False)
