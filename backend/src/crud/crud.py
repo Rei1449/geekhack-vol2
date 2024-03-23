@@ -25,12 +25,12 @@ def register_user(session, user_name:str, user_password: str):
         return user_obj.name
 
     else:
-        return "すでにそのユーザー名は登録されています。別のユーザー名を入力してください。"
+        return {"error":"すでにそのユーザー名は登録されています。別のユーザー名を入力してください。"}
 
 def get_user(session, user_name:str, user_password: str):
     user_info = session.query(User).filter(User.name == f"{user_name}").all()
     if not user_info:
-        return "入力されたユーザー名は見つかりませんでした。"
+        return {"error":"入力されたユーザー名は見つかりませんでした。"}
     
     login_pass_hash = hashlib.sha256()
     login_pass_hash.update(user_password.encode())
@@ -38,7 +38,7 @@ def get_user(session, user_name:str, user_password: str):
     if user_info[0].password == login_pass_hash.hexdigest():
         return user_name
     else:
-        return "パスワードが間違っています"
+        return {"error":"パスワードが間違っています"}
 
 def register_score(session, user_name:str, score:int, hand_arr:str):
     hand = hand_arr[0]
@@ -55,7 +55,7 @@ def register_score(session, user_name:str, score:int, hand_arr:str):
         raise HTTPException(status_code=500, detail='error')
     session.commit()
     session.refresh(score_obj)
-    return "結果が保存されました"
+    return {"success":"結果が保存されました"}
 
 def get_score_ranking(session):
     low_scores = session.query(Score).order_by(Score.score).limit(3).all()
@@ -66,6 +66,6 @@ def get_score_ranking(session):
 def get_score_user(session, user_name):
     user_info = session.query(User).filter(User.name == f"{user_name}").all()
     if not user_info:
-        return "入力されたユーザー名は見つかりませんでした。"
+        return {"error":"ユーザーの情報が見つかりませんでした。"}
     results = session.query(Score).filter(Score.user_name == f"{user_name}").order_by(Score.created_at).all()
     return results
