@@ -112,12 +112,10 @@ const Game = () => {
 		setopOponent3Tehai(newOponent3Tehai);
 	};
 
-
-
 	// ゲーム結果を計算
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [showData, setShowData] = useState<number | null>(null);
-	const [num, setNum] = useState<number | null>(null);
+	const [num, setNum] = useState<number>(0);
 	const handleAiNum = (num: number) => {
 		setNum(num);
 	};
@@ -144,53 +142,42 @@ const Game = () => {
 			console.log("error");
 		}
 	};
-	// useEffect(() => {
-	// 	VANTA.DOTS({
-	// 		el: "#game",
-	// 		mouseControls: true,
-	// 		touchControls: true,
-	// 		gyroControls: false,
-	// 		minHeight: 200.0,
-	// 		minWidth: 200.0,
-	// 		scale: 1.0,
-	// 		scaleMobile: 1.0,
-	// 		color: 0x6e20ff,
-	// 		color2: 0x6e20ff,
-	// 		size: 3,
-	// 		spacing: 14.0,
-	// 		showLines: false,
-	// 	});
-	// }, []);
+
 	const [addClass, setAddClass] = useState<boolean>(false);
 	// const timeoutId = setTimeout(() => {
 	// 	setAddClass(true);
 	// }, 700);
+	const [isSuc, setIsSuc] = useState();
+	const [isSaveLoad, setSaveLoad] = useState(false);
 
-		// データベースに結果を保存する
-		const saveResult = async (tehai: HaiInfo[]) => {
-		const tehaiForDB : string[] = [];
+	// データベースに結果を保存する
+	const saveResult = async (tehai: HaiInfo[]) => {
+		setSaveLoad(true);
+		const tehaiForDB: string[] = [];
 		tehai.map((hai) => {
-			tehaiForDB.push(String(hai.kind)+String(hai.number));
-		})
+			tehaiForDB.push(String(hai.kind) + String(hai.number));
+		});
 		const res = await fetch(ENDPOINT_URL + "store", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ 
+			body: JSON.stringify({
 				user_name: "user",
 				score: showData,
 				arr: tehaiForDB,
-				ai: aiNames[num],
-				}),
+				ai: aiNames[num - 1],
+			}),
 		});
 		if (res.ok) {
 			const data = await res.json();
 			console.log(data);
+			setIsSuc(data.success);
+			setSaveLoad(false);
 		} else {
 			console.log("error");
 		}
-	}
+	};
 
 	return (
 		<div id="game" className="w-screen h-screen bg-[#151515] p-10">
@@ -270,7 +257,7 @@ const Game = () => {
 											</>
 										)}
 										<div className="">
-											{num === null ? (
+											{num === 0 ? (
 												<>
 													<button className="m-auto block mt-20 text-xl opacity-30 border border-gray-500 rounded-[20px] w-[200px] text-center p-[10px]">
 														和がる!!!
@@ -297,6 +284,24 @@ const Game = () => {
 											<span className="mt-10 text-xl">Score</span>
 										</div>
 										<p className="text-[200px]">{showData}</p>
+										{isSuc ? (
+											<></>
+										) : (
+											<>
+												{isSaveLoad && (
+													<>
+														<p>loading</p>
+													</>
+												)}
+												<button
+													className="hover:bg-[#38b48b] duration-300 mt-10 border border-gray-700 p-[10px] w-[200px] text-center rounded-[20px]"
+													onClick={() => saveResult(playerTehai)}>
+													スコアを保存する→
+												</button>
+											</>
+										)}
+
+										{isSuc && <>{isSuc}!</>}
 										<Link
 											className="hover:bg-[#38b48b] duration-300 mt-10 border border-gray-700 p-[10px] w-[200px] text-center rounded-[20px]"
 											to="/">
@@ -337,100 +342,6 @@ const Game = () => {
 				<Oponent tehai={oponent2Tehai} kawa={oponent2Kawa} />
 				<Oponent tehai={oponent3Tehai} kawa={oponent3Kawa} />
 			</div>
-			<Dialog>
-				<DialogTrigger>
-					<p>select AI</p>
-					<div>
-						{isLoading && (
-							<>
-								<p>loading</p>
-							</>
-						)}
-					</div>
-				</DialogTrigger>
-				<DialogContent className="bg-origin border-gray-900 min-w-[70%] p-20">
-					<DialogHeader className="w-full overflow-scroll">
-						<p className="text-white flex items-center">
-							<span className="text-xl">Tehai</span>
-						</p>
-						<div className="flex">
-							{playerTehai.map((hai, index) => {
-								if (index < 13) {
-									return <ViewTehai hai={hai} key={index} />;
-								} else {
-									return (
-										<div className="ml-4" key={index}>
-											<ViewTehai hai={hai} />
-										</div>
-									);
-								}
-							})}
-						</div>
-						{showData === null ? (
-							<>
-								<div className="text-white flex items-center ">
-									<span className="mt-10 text-xl">Select AI</span>
-								</div>
-								<div className="flex justify-between">
-									<div
-										onClick={() => handleAiNum(1)}
-										className={
-											num === 1
-												? "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-slate-500 cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
-												: "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
-										}>
-										LLaMA
-									</div>
-									<div
-										onClick={() => handleAiNum(2)}
-										className={
-											num === 2
-												? "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-slate-500 cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
-												: "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
-										}>
-										{" "}
-										chatGPT
-									</div>
-									<div
-										onClick={() => handleAiNum(3)}
-										className={
-											num === 3
-												? "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-slate-500 cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
-												: "hover:scale-95 duration-200  hover:bg-slate-600 mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
-										}>
-										{" "}
-										xxxxx
-									</div>
-								</div>
-								{num === 0 ? (
-									<>
-										<button>agaru</button>
-									</>
-								) : (
-									<>
-										<AgariButton onClickMethod={() => tryApi(playerTehai)} />
-									</>
-								)}
-							</>
-						) : (
-							<>
-								<div className="text-white flex items-center ">
-									<span className="mt-10 text-xl">Score</span>
-								</div>
-								<p className="text-[200px]">{showData}</p>
-								<Link
-									className="mt-10 border border-gray-700 p-[10px] w-[200px] text-center rounded-[20px]"
-									to="/">
-									home→
-								</Link>
-								<button onClick={() => {saveResult(playerTehai)}}>
-									結果を保存
-								</button>
-							</>
-						)}
-					</DialogHeader>
-				</DialogContent>
-			</Dialog>
 		</div>
 	);
 };
