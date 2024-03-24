@@ -92,11 +92,6 @@ export default function Home() {
 			console.log("error");
 		}
 	};
-	// useEffect(() => {
-	// 	getUserResults("user");
-	// }, []);
-
-	//const [userData, setUserData] = useState([]);
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [stateRankingDatas, SetRankingData] =
