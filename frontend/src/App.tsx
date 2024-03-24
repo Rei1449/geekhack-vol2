@@ -9,7 +9,7 @@ import Game from "./components/game/Game";
 import Ranking from "./components/game/Ranking";
 import Rule from "./Rule/Rule";
 import User from "./User/User";
-import Login from "./components/Login";
+import Login from "./Login";
 
 function App() {
 	return (

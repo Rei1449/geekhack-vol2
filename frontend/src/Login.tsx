@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { ENDPOINT_URL, USER_NAME_KEY } from "./game/Constants";
+import { ENDPOINT_URL, USER_NAME_KEY } from "./components/game/Constants";
 
 const Login = () => {
     const [userName, setUserName] = useState<string>("");
