@@ -16,3 +16,5 @@ export const UNDEFINED_RESULT_DATA: ResultData = {
     updated_at: "2024",
     created_at: "2024",
 };
+
+export const USER_NAME_KEY: string = "user_name";
