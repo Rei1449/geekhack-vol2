@@ -95,8 +95,8 @@ const Game = () => {
 			setOponent3Kawa([...oponent3Kawa, popYama()]);
 		}, 1500);
 
-		if (yama.length <= 4) {
-			alert("牌の上限を超えたのであがってください🙇");
+		if (yama.length <= 7) {
+			window.alert("牌の上限を超えたのであがってください🙇");
 		}
 		setTimeout(() => {
 			setLock(true);
