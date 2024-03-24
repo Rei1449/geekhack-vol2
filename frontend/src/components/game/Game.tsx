@@ -145,13 +145,16 @@ const Game = () => {
 		tehai.map((hai) => {
 			stringTehai.push(GetHaiName(hai));
 		});
-		const res = await fetch(`http://localhost:8080/api/${num}`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ arr: stringTehai }),
-		});
+		const res = await fetch(
+			`https://hack-fast-api-65ce6a3d3ac6.herokuapp.com/api/${num}`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ arr: stringTehai }),
+			}
+		);
 		if (res.ok) {
 			const data = await res.json();
 			console.log(data);
