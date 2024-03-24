@@ -8,7 +8,7 @@ const Hai: React.VFC<Props> = ({ hai }) => {
 	const imgSrc = "/hai-img/hai" + hai.kind + "_" + hai.number + ".png";
 	return (
 		<>
-			<img src={imgSrc} className="w-8 origin-rotate" />
+			<img src={imgSrc} className="w-9 origin-rotate" />
 		</>
 	);
 };

@@ -9,6 +9,29 @@ body {
 	font-family: "Nova Square", sans-serif;
 	color: white;
 }
+.nobar::-webkit-scrollbar {
+	display: none;
+}
+.fixed-element0 {
+	position: fixed;
+	left: 50%;
+	transform: translateX(-50%);
+}
+.fixed-element {
+	position: fixed;
+	left: 50%;
+	transform: translateX(-50%) rotate(180deg);
+}
+.fixed-element2 {
+	position: fixed;
+	top: 40%; /* 上端を画面の中央に配置 */
+	transform: translateY(-50%) rotate(90deg);
+}
+.fixed-element3 {
+	position: fixed;
+	top: 40%; /* 上端を画面の中央に配置 */
+	transform: translateY(-50%) rotate(-90deg);
+}
 .origin-middle {
 	left: 45%;
 	top: 60%;

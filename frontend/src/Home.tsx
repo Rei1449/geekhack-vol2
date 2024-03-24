@@ -111,9 +111,67 @@ export default function Home() {
 	return (
 		<div className="w-screen h-screen bg-[#151515]">
 			<div className="flex items-center justify-between px-20 pt-[0%] h-screen">
-				<div className="overflow-y-scroll w-[45%] bg-origin-2 h-[85%] rounded-[20px] p-10">
+				<div className="overflow-y-scroll nobar w-[45%] bg-origin-2 h-[85%] rounded-[20px] p-10">
 					{isLoading ? (
-						<p>Loading</p>
+						<>
+							<div className="flex border border-gray-800 p-[8px] rounded-[10px] justify-between">
+								<div
+									onClick={() => {
+										getRanking();
+										setIsChoose(1);
+									}}
+									className={
+										isChoose === 1
+											? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+									}>
+									All(High)
+								</div>
+								<div
+									onClick={() => {
+										getAIRank("llama");
+										setIsChoose(2);
+									}}
+									className={
+										isChoose === 2
+											? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+									}>
+									{" "}
+									llama
+								</div>
+								<div
+									onClick={() => {
+										getAIRank("chatgpt");
+										setIsChoose(3);
+									}}
+									className={
+										isChoose === 3
+											? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+									}>
+									{" "}
+									chatgpt
+								</div>
+								<div
+									onClick={() => {
+										getAIRank("gemini");
+										setIsChoose(4);
+									}}
+									className={
+										isChoose === 4
+											? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+									}>
+									{" "}
+									gemini
+								</div>
+								<div className="border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center">
+									All(Low)
+								</div>
+							</div>
+							<p className="text-[50px] mt-5 ml-1 load">Loading</p>
+						</>
 					) : (
 						<>
 							<div className="flex border border-gray-800 p-[8px] rounded-[10px] justify-between">
@@ -245,7 +303,7 @@ export default function Home() {
 							<DialogTrigger className="duration-200 hover:bg-[#38b48b] mt-5 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
 								show record →
 							</DialogTrigger>
-							<DialogContent className="overflow-y-scroll bg-origin border-gray-800 min-w-[70%] p-20 h-[80%]">
+							<DialogContent className="overflow-y-scroll nobar bg-origin border-gray-800 min-w-[70%] p-20 h-[80%]">
 								<DialogHeader>
 									{isLoadingUserResults ? (
 										<p>読み込み中</p>
