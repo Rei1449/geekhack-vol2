@@ -22,6 +22,7 @@ import {
 import ViewTehai from "./ViewTehai";
 import { Link } from "react-router-dom";
 import UnTurnHai from "./UnTurnHai";
+import { USER_NAME_KEY } from "./Constants";
 
 const makeYama = (): HaiInfo[] => {
 	const yama: HaiInfo[] = [];
@@ -169,6 +170,7 @@ const Game = () => {
 	// データベースに結果を保存する
 	const saveResult = async (tehai: HaiInfo[]) => {
 		setSaveLoad(true);
+		const item = localStorage.getItem(USER_NAME_KEY);
 		const tehaiForDB: string[] = [];
 		tehai.map((hai) => {
 			tehaiForDB.push(String(hai.kind) + String(hai.number));
@@ -179,7 +181,7 @@ const Game = () => {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
-				user_name: "user",
+				user_name: item,
 				score: showData,
 				arr: tehaiForDB,
 				ai: aiNames[num - 1],

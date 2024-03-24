@@ -98,7 +98,9 @@ const Login = () => {
 			setIsLoading(false);
 			if (userName == data) {
 				localStorage.setItem(USER_NAME_KEY, data);
+
 				setError("");
+				document.location = "/";
 			} else {
 				setError(data.error);
 			}
@@ -240,27 +242,39 @@ const Login = () => {
 							Three
 						</h1>
 						<div className="m-auto mt-10 w-[300px]">
-							<div className="bg-black">
-								<p>ユーザー名</p>
+							<div className="">
+								<p>user name</p>
 								<input
+									type="text"
+									className="duration-200 bg-[#151515]  mt-1 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]"
 									value={userName}
 									onChange={(e) => {
 										setUserName(e.target.value);
 									}}
 								/>
-								<p>パスワード</p>
+								<p className="mt-5">password</p>
 								<input
+									type="password"
+									className="duration-200 bg-[#151515]  mt-1 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]"
 									value={password}
 									onChange={(e) => {
 										setPassword(e.target.value);
 									}}
 								/>
 								<p>{error}</p>
-								<button onClick={checkLogin}>ログイン</button>
-								<Link to="/user/register">新規登録はこちら</Link>
+								<button
+									className="m-auto duration-200 bg-[#151515] hover:bg-[#38b48b] mt-10 text-2xl block border border-gray-500 rounded-[20px] w-[200px] text-center p-[10px]"
+									onClick={checkLogin}>
+									ログイン
+								</button>
+								<Link
+									className="m-auto duration-200  hover:text-[#38b48b] mt-5 text-md block  rounded-[20px] w-[200px] text-center "
+									to="/register">
+									新規登録はこちら
+								</Link>
 							</div>
 							<Link
-								className="duration-200  hover:bg-[#38b48b] mt-5 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]"
+								className="m-auto duration-200  hover:text-[#38b48b] mt-5 text-md block  rounded-[20px] w-[200px] text-center "
 								to="/rule">
 								Three's rule →
 							</Link>

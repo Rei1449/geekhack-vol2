@@ -7,6 +7,7 @@ import type { ResultData } from "./types/ResultData";
 import {
 	ENDPOINT_URL,
 	UNDEFINED_RESULT_DATA,
+	USER_NAME_KEY,
 } from "./components/game/Constants";
 import type { HaiInfo } from "./types/HaiInfo";
 
@@ -75,7 +76,7 @@ export default function Home() {
 	const [userResults, setUserResults] = useState<ResultData[]>([
 		UNDEFINED_RESULT_DATA,
 	]);
-	const getUserResults = async (userName: string) => {
+	const getUserResults = async (userName: string | null) => {
 		setIsLoadingUserResults(true);
 		const res = await fetch(ENDPOINT_URL + "user/" + userName, {
 			method: "Get",
@@ -122,8 +123,9 @@ export default function Home() {
 		}
 	};
 	const [isChoose, setIsChoose] = useState<number>(1);
+	const item = localStorage.getItem(USER_NAME_KEY);
 	useEffect(() => {
-		getUserResults("user");
+		getUserResults(item);
 		getRanking();
 	}, []);
 	return (
@@ -269,9 +271,7 @@ export default function Home() {
 										<p>読み込み中</p>
 									) : (
 										<>
-											<p className="text-[50px] font-bold">
-												{userResults[0].user_name}
-											</p>
+											<p className="text-[50px] font-bold">{item}</p>
 											<p>record</p>
 											{userResults.map((data: ResultData) => (
 												<div key={data.id} className="">
