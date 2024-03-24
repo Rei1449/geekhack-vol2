@@ -10,7 +10,11 @@ import Ranking from "./components/game/Ranking";
 import Rule from "./Rule/Rule";
 import User from "./User/User";
 import Login from "./Login";
+
 import { USER_NAME_KEY } from "./components/game/Constants";
+
+import Register from "./Register";
+
 
 function App() {
 	const item = localStorage.getItem(USER_NAME_KEY);
@@ -18,6 +22,7 @@ function App() {
 	return (
 		<>
 			<Routes>
+
 				{item === null ? (
 					<>
 						<Route path="/" element={<Login />} />
@@ -27,6 +32,7 @@ function App() {
 						<Route path="/rule" element={<Login />} />
 						<Route path="/user" element={<Login />} />
 						<Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
 					</>
 				) : (
 					<>
@@ -37,6 +43,7 @@ function App() {
 						<Route path="/rule" element={<Rule />} />
 						<Route path="/user" element={<User />} />
 						<Route path="/login" element={<Home />} />
+            <Route path="/register" element={<Home />} />
 					</>
 				)}
 			</Routes>
