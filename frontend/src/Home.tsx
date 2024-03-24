@@ -109,13 +109,24 @@ export default function Home() {
 		if (res.ok) {
 			const data: rankingDatas = await res.json();
 			SetRankingData(data);
-			console.log(data);
+
 			setIsLoading(false);
 		} else {
 			console.log("error");
 		}
 	};
-
+	const getAIRank = async (aiID: string) => {
+		setIsLoading(true);
+		const res = await fetch(ENDPOINT_URL + `ranking/${aiID}`);
+		if (res.ok) {
+			const data: rankingDatas = await res.json();
+			SetRankingData(data);
+			setIsLoading(false);
+		} else {
+			console.log("error");
+		}
+	};
+	const [isChoose, setIsChoose] = useState<number>(1);
 	useEffect(() => {
 		getUserResults("user");
 		getRanking();
@@ -128,10 +139,66 @@ export default function Home() {
 						<p>Loading</p>
 					) : (
 						<>
+							<div className="flex border border-gray-800 p-[8px] rounded-[10px] justify-between">
+								<div
+									onClick={() => {
+										getRanking();
+										setIsChoose(1);
+									}}
+									className={
+										isChoose === 1
+											? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+									}>
+									All(High)
+								</div>
+								<div
+									onClick={() => {
+										getAIRank("llama");
+										setIsChoose(2);
+									}}
+									className={
+										isChoose === 2
+											? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+									}>
+									{" "}
+									llama
+								</div>
+								<div
+									onClick={() => {
+										getAIRank("chatgpt");
+										setIsChoose(3);
+									}}
+									className={
+										isChoose === 3
+											? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+									}>
+									{" "}
+									chatgpt
+								</div>
+								<div
+									onClick={() => {
+										getAIRank("gemini");
+										setIsChoose(4);
+									}}
+									className={
+										isChoose === 4
+											? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+									}>
+									{" "}
+									gemini
+								</div>
+								<div className="border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center">
+									All(Low)
+								</div>
+							</div>
 							{stateRankingDatas.high.map((rankingData: any, index: number) => {
 								return (
-									<div key={rankingData.id} className="mt-10">
-										<div className="flex items-center">
+									<div key={rankingData.id} className="">
+										<div className="flex items-center mt-10">
 											<p className="text-[50px] text-[#38b48b]">{index + 1}</p>
 											<div className="flex items-center ml-5">
 												<p
