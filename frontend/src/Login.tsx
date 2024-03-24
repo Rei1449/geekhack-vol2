@@ -1,13 +1,9 @@
 import { Key, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-	ENDPOINT_URL,
-	UNDEFINED_RESULT_DATA,
-	USER_NAME_KEY,
-} from "./components/game/Constants";
+import { ENDPOINT_URL, USER_NAME_KEY } from "./components/game/Constants";
 import Hai from "./components/game/Hai";
 import { HaiInfo } from "./types/HaiInfo";
-import { ResultData } from "./types/ResultData";
+//import { ResultData } from "./types/ResultData";
 
 type rankingData = {
 	hand: string;
