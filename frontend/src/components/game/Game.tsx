@@ -84,15 +84,15 @@ const Game = () => {
 		setTimeout(() => {
 			setLock(true);
 			setOponent1Kawa([...oponent1Kawa, popYama()]);
-		}, 2000);
+		}, 500);
 		setTimeout(() => {
 			setLock(true);
 			setOponent2Kawa([...oponent2Kawa, popYama()]);
-		}, 4000);
+		}, 1000);
 		setTimeout(() => {
 			setLock(true);
 			setOponent3Kawa([...oponent3Kawa, popYama()]);
-		}, 6000);
+		}, 1500);
 
 		if (yama.length == 0) {
 			tryApi(playerTehai);
@@ -101,7 +101,7 @@ const Game = () => {
 			setLock(true);
 			tumo();
 			setLock(false);
-		}, 7000);
+		}, 2000);
 	};
 	const [isGame, setIsGame] = useState(false);
 	const startGame = (): void => {
