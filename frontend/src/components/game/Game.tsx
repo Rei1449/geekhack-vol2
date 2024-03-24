@@ -77,32 +77,80 @@ const Game = () => {
 		}
 		return false;
 	};
+
+	// ポンの処理
+	const checkPon = (targetHai: HaiInfo, oponentName: string): boolean => {
+		let count = 0;
+		playerTehai.map((hai) => {
+			if (IsSameHai(hai, targetHai)) {
+				count += 1;
+			}
+		})
+		if (count >= 2) {
+			console.log("canPon:"+GetHaiName(targetHai));
+			setLock(true);
+			if(window.confirm(GetHaiName(targetHai)+"を"+oponentName+"からポンしますか？")) {
+				playerTehai.push(targetHai);
+				return true;
+			}
+		}
+		return false;
+	}
+
+
 	const [lock, setLock] = useState(false);
 	const progressTurn = (discardHai: HaiInfo): void => {
 		setLock(true);
 		discard(discardHai);
 		// cpuはつもぎり
+		const waitTime = 500;
+		let canProg = true;
 		setTimeout(() => {
 			setLock(true);
-			setOponent1Kawa([...oponent1Kawa, popYama()]);
-		}, 500);
+			const oponentTumoHai: HaiInfo = popYama();
+			if (checkPon(oponentTumoHai, "下家")) {
+				canProg = false;
+				setLock(false);
+				return;
+			};
+			setOponent1Kawa([...oponent1Kawa, oponentTumoHai]);
+		}, waitTime);
+		
 		setTimeout(() => {
+			if (!canProg) {return;}
 			setLock(true);
-			setOponent2Kawa([...oponent2Kawa, popYama()]);
-		}, 1000);
+			const oponentTumoHai: HaiInfo = popYama();
+			if (checkPon(oponentTumoHai, "対面")) {
+				canProg = false;
+				setLock(false);
+				return;
+			};
+			setOponent2Kawa([...oponent2Kawa, oponentTumoHai]);
+		}, waitTime*2);
+		
 		setTimeout(() => {
+			if (!canProg) {return;}
 			setLock(true);
-			setOponent3Kawa([...oponent3Kawa, popYama()]);
-		}, 1500);
+			const oponentTumoHai: HaiInfo = popYama();
+			if (checkPon(oponentTumoHai, "上家")) {
+				canProg = false;
+				setLock(false);
+				return;
+			};
+			setOponent3Kawa([...oponent3Kawa, oponentTumoHai]);
+		}, waitTime*3);
 
 		if (yama.length == 0) {
 			tryApi(playerTehai);
 		}
 		setTimeout(() => {
+			if (!canProg) {return;}
 			setLock(true);
 			tumo();
 			setLock(false);
-		}, 2000);
+		}, waitTime*4);
+		// setLock(false);
+		console.log("progressTurn")
 	};
 	const [isGame, setIsGame] = useState(false);
 	const startGame = (): void => {
@@ -204,6 +252,7 @@ const Game = () => {
 	}, []);
 	return (
 		<div id="game" className="w-screen h-screen bg-[#151515] p-10">
+			
 			{isGame ? (
 				<>
 					<Dialog>

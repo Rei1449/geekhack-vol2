@@ -17,6 +17,7 @@ export default function UnTurnHai(props: any) {
 						return (
 							<img
 								src={"/hai-img/hai" + hai.kind + "_" + hai.number + ".png"}
+								key={index}
 								className="w-20 duration-300 cursor-pointer"
 							/>
 						);
@@ -24,6 +25,7 @@ export default function UnTurnHai(props: any) {
 						return (
 							<img
 								src={"/hai-img/hai" + hai.kind + "_" + hai.number + ".png"}
+								key={index}
 								className="w-20 duration-300 cursor-pointer"
 							/>
 						);
