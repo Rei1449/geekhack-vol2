@@ -77,80 +77,32 @@ const Game = () => {
 		}
 		return false;
 	};
-
-	// ポンの処理
-	const checkPon = (targetHai: HaiInfo, oponentName: string): boolean => {
-		let count = 0;
-		playerTehai.map((hai) => {
-			if (IsSameHai(hai, targetHai)) {
-				count += 1;
-			}
-		})
-		if (count >= 2) {
-			console.log("canPon:"+GetHaiName(targetHai));
-			setLock(true);
-			if(window.confirm(GetHaiName(targetHai)+"を"+oponentName+"からポンしますか？")) {
-				playerTehai.push(targetHai);
-				return true;
-			}
-		}
-		return false;
-	}
-
-
 	const [lock, setLock] = useState(false);
 	const progressTurn = (discardHai: HaiInfo): void => {
 		setLock(true);
 		discard(discardHai);
 		// cpuはつもぎり
-		const waitTime = 500;
-		let canProg = true;
 		setTimeout(() => {
 			setLock(true);
-			const oponentTumoHai: HaiInfo = popYama();
-			if (checkPon(oponentTumoHai, "下家")) {
-				canProg = false;
-				setLock(false);
-				return;
-			};
-			setOponent1Kawa([...oponent1Kawa, oponentTumoHai]);
-		}, waitTime);
-		
+			setOponent1Kawa([...oponent1Kawa, popYama()]);
+		}, 500);
 		setTimeout(() => {
-			if (!canProg) {return;}
 			setLock(true);
-			const oponentTumoHai: HaiInfo = popYama();
-			if (checkPon(oponentTumoHai, "対面")) {
-				canProg = false;
-				setLock(false);
-				return;
-			};
-			setOponent2Kawa([...oponent2Kawa, oponentTumoHai]);
-		}, waitTime*2);
-		
+			setOponent2Kawa([...oponent2Kawa, popYama()]);
+		}, 1000);
 		setTimeout(() => {
-			if (!canProg) {return;}
 			setLock(true);
-			const oponentTumoHai: HaiInfo = popYama();
-			if (checkPon(oponentTumoHai, "上家")) {
-				canProg = false;
-				setLock(false);
-				return;
-			};
-			setOponent3Kawa([...oponent3Kawa, oponentTumoHai]);
-		}, waitTime*3);
+			setOponent3Kawa([...oponent3Kawa, popYama()]);
+		}, 1500);
 
-		if (yama.length == 0) {
-			tryApi(playerTehai);
+		if (yama.length <= 4) {
+			alert("牌の上限を超えたのであがってください🙇");
 		}
 		setTimeout(() => {
-			if (!canProg) {return;}
 			setLock(true);
 			tumo();
 			setLock(false);
-		}, waitTime*4);
-		// setLock(false);
-		console.log("progressTurn")
+		}, 2000);
 	};
 	const [isGame, setIsGame] = useState(false);
 	const startGame = (): void => {
@@ -252,7 +204,6 @@ const Game = () => {
 	}, []);
 	return (
 		<div id="game" className="w-screen h-screen bg-[#151515] p-10">
-			
 			{isGame ? (
 				<>
 					<Dialog>

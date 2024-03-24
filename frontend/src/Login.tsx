@@ -47,8 +47,10 @@ const defaultRankingDatas: rankingDatas = {
 const Login = () => {
 	const [stateRankingDatas, SetRankingData] =
 		useState<rankingDatas>(defaultRankingDatas);
+	const [isShowLow, setIsShowLow] = useState<boolean>();
 	const getRanking = async () => {
 		setIsLoading(true);
+		setIsShowLow(false);
 		const res = await fetch(ENDPOINT_URL + "ranking", {
 			method: "GET",
 		});
@@ -63,6 +65,7 @@ const Login = () => {
 	};
 	const getAIRank = async (aiID: string) => {
 		setIsLoading(true);
+		setIsShowLow(false);
 		const res = await fetch(ENDPOINT_URL + `ranking/${aiID}`);
 		if (res.ok) {
 			const data: rankingDatas = await res.json();
@@ -227,71 +230,117 @@ const Login = () => {
 										{" "}
 										gemini
 									</div>
-									<div className="border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center">
+									<div
+										onClick={() => {
+											getRanking();
+											setIsShowLow(true);
+											setIsChoose(5);
+										}}
+										className={
+											isChoose === 5
+												? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+												: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+										}>
+										{" "}
 										All(Low)
 									</div>
 								</div>
-								{stateRankingDatas.high.map(
-									(rankingData: any, index: number) => {
-										return (
-											<div key={rankingData.id} className="">
-												<div className="flex items-center mt-10">
-													<p className="text-[50px] text-[#38b48b]">
-														{index + 1}
-													</p>
-													<div className="flex items-center ml-5">
-														<p
-															className={
-																index === 0
-																	? "text-4xl text-origin leading-none"
-																	: "text-4xl leading-none"
-															}>
-															{rankingData.user_name}
-														</p>
-														<p className="text-gray-700 text-2xl leading-none">
-															:{rankingData.ai}
-														</p>
-													</div>
-												</div>
 
-												<p className="text-xl">{rankingData.score}</p>
-												<div className="flex mt-1">
-													{rankingData.hand
-														.split(",")
-														.map(
-															(hand: any[], index: Key | null | undefined) => {
-																const haiInfo: HaiInfo = {
-																	kind: Number(hand[0]),
-																	number: Number(hand[1]),
-																};
-																return <Hai hai={haiInfo} key={index} />;
-															}
-														)}
-												</div>
-											</div>
-										);
-									}
+								{isShowLow === true ? (
+									<>
+										{stateRankingDatas.low.map(
+											(rankingData: any, index: number) => {
+												return (
+													<div key={rankingData.id} className="">
+														<div className="flex items-center mt-10">
+															<p className="text-[50px] text-[#38b48b]">
+																{index + 1}
+															</p>
+															<div className="flex items-center ml-5">
+																<p
+																	className={
+																		index === 0
+																			? "text-4xl text-origin leading-none"
+																			: "text-4xl leading-none"
+																	}>
+																	{rankingData.user_name}
+																</p>
+																<p className="text-gray-700 text-2xl leading-none">
+																	:{rankingData.ai}
+																</p>
+															</div>
+														</div>
+
+														<p className="text-xl">{rankingData.score}</p>
+														<div className="flex mt-1">
+															{rankingData.hand
+																.split(",")
+																.map(
+																	(
+																		hand: any[],
+																		index: Key | null | undefined
+																	) => {
+																		const haiInfo: HaiInfo = {
+																			kind: Number(hand[0]),
+																			number: Number(hand[1]),
+																		};
+																		return <Hai hai={haiInfo} key={index} />;
+																	}
+																)}
+														</div>
+													</div>
+												);
+											}
+										)}
+									</>
+								) : (
+									<>
+										{stateRankingDatas.high.map(
+											(rankingData: any, index: number) => {
+												return (
+													<div key={rankingData.id} className="">
+														<div className="flex items-center mt-10">
+															<p className="text-[50px] text-[#38b48b]">
+																{index + 1}
+															</p>
+															<div className="flex items-center ml-5">
+																<p
+																	className={
+																		index === 0
+																			? "text-4xl text-origin leading-none"
+																			: "text-4xl leading-none"
+																	}>
+																	{rankingData.user_name}
+																</p>
+																<p className="text-gray-700 text-2xl leading-none">
+																	:{rankingData.ai}
+																</p>
+															</div>
+														</div>
+
+														<p className="text-xl">{rankingData.score}</p>
+														<div className="flex mt-1">
+															{rankingData.hand
+																.split(",")
+																.map(
+																	(
+																		hand: any[],
+																		index: Key | null | undefined
+																	) => {
+																		const haiInfo: HaiInfo = {
+																			kind: Number(hand[0]),
+																			number: Number(hand[1]),
+																		};
+																		return <Hai hai={haiInfo} key={index} />;
+																	}
+																)}
+														</div>
+													</div>
+												);
+											}
+										)}
+									</>
 								)}
-								{/* {stateRankingDatas.low.map((rankingData: any) => {
-								return (
-									<div key={rankingData.id}>
-										<p>{rankingData.user_name}</p>
-										<p className="text-xl">{rankingData.score}</p>
-										<p>{rankingData.ai}</p>
-										<div className="flex">
-											{rankingData.hand
-												.split(",")
-												.map((hand: any[], index: Key | null | undefined) => {
-													const haiInfo: HaiInfo = {
-														kind: Number(hand[0]),
-														number: Number(hand[1]),
-													};
-													return <Hai hai={haiInfo} key={index} />;
-												})}
-										</div>
-									</div>
-								);
-							})} */}
 							</>
 						)}
 					</div>
