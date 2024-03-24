@@ -51,26 +51,6 @@ const defaultRankingDatas: rankingDatas = {
 };
 
 export default function Home() {
-	// interface UserData {
-	// 	id: number;
-	// 	user_name: string;
-	// 	hand: string;
-	// 	score: number;
-	// 	created_at: string;
-	// 	updated_at: string;
-	// }
-	// const getRecord = async () => {
-	// 	const res = await fetch("http://localhost:8080/user/string");
-	// 	if (res.ok) {
-	// 		const data = await res.json();
-	// 		console.log(data);
-	// 		setUserData(data);
-	// 	}
-	// };
-	// useEffect(() => {
-	// 	getRecord();
-	// }, []);
-	// const [userData, setUserData] = useState([]);
 	const [isLoadingUserResults, setIsLoadingUserResults] =
 		useState<boolean>(true);
 	const [userResults, setUserResults] = useState<ResultData[]>([
