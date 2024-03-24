@@ -7,7 +7,7 @@ export default function UnTurnHai(props: any) {
 	const { tehai, kawa } = props;
 	return (
 		<div className="m-4">
-			<div className="fixed top-[50%] left-[50%]">
+			<div className="fixed fixed-element0 top-[55%] left-[50%]">
 				<Kawa kawa={kawa} />
 			</div>
 

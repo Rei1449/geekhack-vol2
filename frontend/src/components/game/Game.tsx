@@ -259,20 +259,20 @@ const Game = () => {
 						<>
 							{lock ? (
 								<>
-									<div className="duration-200 opacity-20 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
+									<div className="fixed bottom-[20%] right-[5%] duration-200 opacity-20 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
 										{isGame && (
 											<>
-												<p className="">select AI</p>
+												<p className="">あがり</p>
 											</>
 										)}
 									</div>
 								</>
 							) : (
 								<>
-									<DialogTrigger className="duration-200 hover:bg-[#38b48b] text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
+									<DialogTrigger className="fixed bottom-[20%] right-[5%] duration-200 hover:bg-[#38b48b] text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
 										{isGame && (
 											<>
-												<p className="">select AI</p>
+												<p className="">あがり</p>
 											</>
 										)}
 									</DialogTrigger>
@@ -281,7 +281,7 @@ const Game = () => {
 						</>
 
 						<DialogContent className="bg-origin border-gray-800 min-w-[70%] min-h-[80%] p-20">
-							<DialogHeader className="w-full overflow-x-scroll">
+							<DialogHeader className="w-full overflow-x-scroll nobar">
 								<p className="text-white flex items-center">
 									<span className="text-xl">Tehai</span>
 								</p>
@@ -349,7 +349,7 @@ const Game = () => {
 											{num === 0 ? (
 												<>
 													<button className="m-auto block mt-20 text-xl opacity-30 border border-gray-500 rounded-[20px] w-[200px] text-center p-[10px]">
-														和がる!!!
+														あがる!!!
 													</button>
 												</>
 											) : (
@@ -439,13 +439,13 @@ const Game = () => {
 			</div>
 
 			<div className="">
-				<div className="fixed right-[5%]">
+				<div className="fixed right-[20%] fixed-element3">
 					<Oponent tehai={oponent1Tehai} kawa={oponent1Kawa} />
 				</div>
-				<div className="fixed top-[5%] left-[50%]">
+				<div className="fixed top-[8%] fixed-element">
 					<Oponent tehai={oponent2Tehai} kawa={oponent2Kawa} />
 				</div>
-				<div className="fixed">
+				<div className="fixed left-[20%] fixed-element2">
 					<Oponent tehai={oponent3Tehai} kawa={oponent3Kawa} />
 				</div>
 			</div>
