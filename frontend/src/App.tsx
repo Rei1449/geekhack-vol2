@@ -10,6 +10,7 @@ import Ranking from "./components/game/Ranking";
 import Rule from "./Rule/Rule";
 import User from "./User/User";
 import Login from "./Login";
+import Register from "./Register";
 
 function App() {
 	return (
@@ -22,6 +23,7 @@ function App() {
 				<Route path="/rule" element={<Rule />} />
 				<Route path="/user" element={<User />} />
 				<Route path="/login" element={<Login />} />
+				<Route path="/register" element={<Register />} />
 			</Routes>
 		</>
 	);
