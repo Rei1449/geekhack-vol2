@@ -29,10 +29,12 @@ class ConnectionManager:
     # async def broadcast(self, room_id: str) -> None:
     #     for connection in self.active_connections:
     #         await connection.send_text(message)
-    
-    async def multicast(self, room_id: str, client_name: str, message: str) -> None:
+    async def multicast(self, room_id: str, client_name: str, hai: str) -> None:
       for name in self.active_room[room_id]:
-        await self.active_connections[name].send_json({"user_name":client_name, "message":message})
+        await self.active_connections[name].send_json({"user_name":client_name, "hai":"11"})
+
+    async def unicast(self, client_name: str, hai: str) -> None:
+        await self.active_connections[client_name].send_json({"hai":"11"})
     
     async def create_room(self, room_id: str, host_name) -> None:
       self.active_room[room_id] = [host_name]
@@ -85,12 +87,21 @@ async def entry(entry:Entry):
   await manager.entry(entry.room_id, entry.user_name)
   return {"success":"部屋に入ります"}
 
-class Msg(BaseModel):
+class Hai(BaseModel):
   user_name: str
   room_id: str
-  message: str
+  hai: str
 
-@router.post("/msg")
-async def send_message(msg:Msg):
-  await manager.multicast(msg.room_id, msg.user_name, msg.message)
+@router.post("/hai")
+async def send_message(hai:Hai):
+  await manager.multicast(hai.room_id, hai.user_name, hai.hai)
+  return 0
+
+class GameMaster(BaseModel):
+    user_name: str
+    hai: str
+
+@router.post("/gm")
+async def send_message(gm:GameMaster):
+  await manager.unicast(gm.user_name, gm.hai)
   return 0
