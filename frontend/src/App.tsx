@@ -14,6 +14,7 @@ import Login from "./Login";
 import { USER_NAME_KEY } from "./components/game/Constants";
 
 import Register from "./Register";
+import Chat from "./testweb/Chat";
 
 function App() {
 	const item = localStorage.getItem(USER_NAME_KEY);
@@ -42,6 +43,7 @@ function App() {
 						<Route path="/user" element={<User />} />
 						<Route path="/login" element={<Home />} />
 						<Route path="/register" element={<Home />} />
+						<Route path="/test/socket" element={<Chat />} />
 					</>
 				)}
 			</Routes>
