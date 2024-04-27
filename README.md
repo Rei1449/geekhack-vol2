@@ -35,7 +35,9 @@ src
 </pre>
 
 <h3>基本的な役割</h3>
-・Parts　　:ボタンやタイトルなどの最小単位のUIを担うファイル格納する  
-・Modules :ゲーム中、待機中、結果発表などの固有のコンポーネントを持ち、かつPartsを利用するUIファイルを格納する  
-・Functions :共通化できる処理系を持つファイルを格納する  
-・OnLineGame.tsx　:ルーターで呼び出す親ファイル。Functionsを利用し、Modulesを返すファイル  
+<ul>
+    <li>Parts :ボタンやタイトルなどの最小単位のUIを担うファイル格納する　　</li>
+    <li>Modules :ゲーム中、待機中、結果発表などの固有のコンポーネントを持ち、かつPartsを利用するUIファイルを格納する</li>
+    <li>Functions :共通化できる処理系を持つファイルを格納する</li>
+    <li>OnlineGame.tsx :ルーターで呼び出す親ファイル。Functionsを利用し、Modulesを返すファイル</li>
+</ul>
