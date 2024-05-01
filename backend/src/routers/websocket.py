@@ -16,7 +16,7 @@ router = APIRouter()
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
-rds = redis.Redis(host=os.environ["REDIS_URL"], port=os.environ["REDIS_PORT"], password=os.environ["REDIS_PASSWORD"] decode_responses=True)
+rds = redis.Redis(host=os.environ["REDIS_URL"], port=os.environ["REDIS_PORT"], password=os.environ["REDIS_PASSWORD"], decode_responses=True)
 
 class ConnectionManager:
     def __init__(self):
