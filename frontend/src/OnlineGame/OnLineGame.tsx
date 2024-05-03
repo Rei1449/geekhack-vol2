@@ -10,11 +10,17 @@ import { IsSameHai } from "./Functions/IsSameHai";
 import { SortHaiArray } from "./Functions/SortHaiArray";
 import { GetHaiName } from "./Functions/GetHaiName";
 import { HaiArrayToString } from "./Functions/HaiArrayToString";
+import Player from "../components/game/Player";
+import Oponent from "../components/game/Oponent";
+import UnTurnHai from "../components/game/UnTurnHai";
+import { aiNames } from "../components/game/Constants";
+import Hai from "../components/game/Hai";
 
 type Input = {
     users: string[],
     isGM: boolean,
     room_id: string,
+    // wb: WebSocket,
 };
 
 type NameAndTehai = {
@@ -27,8 +33,14 @@ type HaiPai = {
     haipai: NameAndTehai[],
 };
 
+type Result = {
+    tehai: HaiInfo[],
+    point: string,
+    ai_id: number,
+}
+
 const sendHaipai = async (haipai: HaiPai) => {
-    const res = await fetch(WS_URL + "??????", {
+    const res = await fetch(ENDPOINT_URL + "distribute_hand", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -44,7 +56,8 @@ const sendHaipai = async (haipai: HaiPai) => {
 };
 
 const sendTumoHai = async (room_id: string, user_name: string, hai: HaiInfo) => {
-    const res = await fetch(WS_URL + "??????", {
+    console.log(hai);
+    const res = await fetch(ENDPOINT_URL + "draw_tile", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -64,7 +77,7 @@ const sendTumoHai = async (room_id: string, user_name: string, hai: HaiInfo) => 
 };
 
 const sendDiscardHai = async (room_id: string, user_name: string, hai: HaiInfo) => {
-    const res = await fetch(WS_URL + "??????", {
+    const res = await fetch(ENDPOINT_URL + "discard", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -84,7 +97,7 @@ const sendDiscardHai = async (room_id: string, user_name: string, hai: HaiInfo) 
 };
 
 const sendAgariUser = async (room_id: string, user_name: string) => {
-    const res = await fetch(WS_URL + "??????", {
+    const res = await fetch(ENDPOINT_URL + "done", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -102,8 +115,8 @@ const sendAgariUser = async (room_id: string, user_name: string) => {
     }
 }
 
-const sendPoint = async (room_id: string, user_name: string, tehai: HaiInfo[], point: string) => {
-    const res = await fetch(WS_URL + "??????", {
+const sendPoint = async (room_id: string, user_name: string, tehai: HaiInfo[], point: string, ai_id: number) => {
+    const res = await fetch(ENDPOINT_URL + "game_store", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -113,6 +126,7 @@ const sendPoint = async (room_id: string, user_name: string, tehai: HaiInfo[], p
             user_name: user_name,
             tehai: HaiArrayToString(tehai),
             point: point,
+            ai_id: ai_id,
         }),
     });
     if (res.ok) {
@@ -120,6 +134,7 @@ const sendPoint = async (room_id: string, user_name: string, tehai: HaiInfo[], p
         console.log(data);
     } else {
         console.log("error");
+        sendPoint(room_id, user_name, tehai, point, ai_id);
     }
 }
 
@@ -130,7 +145,7 @@ const calcPoint = async (room_id: string, user_name: string, tehai: HaiInfo[], a
         stringTehai.push(GetHaiName(hai));
     });
     const res = await fetch(
-        ENDPOINT_URL + `api/${ai_id}`,
+        "https://hack-fast-api-65ce6a3d3ac6.herokuapp.com/" + `api/${ai_id}`,
         {
             method: "POST",
             headers: {
@@ -141,7 +156,7 @@ const calcPoint = async (room_id: string, user_name: string, tehai: HaiInfo[], a
     );
     if (res.ok) {
         const data = await res.json();
-        sendPoint(room_id, user_name, tehai, data);
+        sendPoint(room_id, user_name, tehai, data, ai_id);
         console.log(data);
     } else {
         console.log("error");
@@ -174,49 +189,87 @@ const saveResult = async (tehai: HaiInfo[], point: string, ai_id: number) => {
     }
 };
 
+
 const OnLineGame = () => {
     const location = useLocation();
 
     // 定数定義
-    const room_id = location.state as Input["room_id"];
-    const isGM = location.state as Input["isGM"];
-    const users = location.state as Input["users"];
+    const input = location.state as Input;
+    const room_id = input["room_id"];
+    const isGM = input["isGM"];
+    const users = input["users"];
+    // const wb = location.state as Input["wb"];
     const player_name: string = localStorage.getItem(USER_NAME_KEY) || "NoUser";
+    let player_index = 4;
+    users.map((user, i) => {
+        if (user == player_name) {
+            player_index = i;
+        }
+    });
+
+    const cyama = makeYama();
+    console.log(cyama);
 
     // state定義
-    const [yama, setYama] = useState<HaiInfo[]>([]);
+    // const [yama, setYama] = useState<HaiInfo[]>([]);
     const [playerTehai, setPlayerTehai] = useState<HaiInfo[]>([]);
     const [isMyTurn, setIsMyTurn] = useState<boolean>(false);
     const [agariUsers, setAgariUsers] = useState<boolean[]>([false, false, false, false]);
     const [kawas, setKawas] = useState<HaiInfo[][]>([[], [], [], []]);
-    const [aiId, setAiId] = useState<number>(0);
-    const [points, setPoints] = useState<string[] | null>(null);
+    const [results, setResults] = useState<Result[] | null>(null);
+    const [gameEnd, setGameEnd] = useState<boolean>(false);
 
+    // console.log(yama);
     // WebSocket定義
-    const catchHaipai = new WebSocket(WS_URL+"?????");
-    catchHaipai.onmessage = function (event) {
-        const data = event.data;
-        setPlayerTehai(StringToHaiArray(data));
+    const wb = new WebSocket(WS_URL+`ws/${player_name}/room/${room_id}`);
+    wb.addEventListener("message", function(event) {
+        const data = JSON.parse(event.data);
+        console.log("onmessage");
+        console.log(data);
+        if ("tehai" in data) {catchHaipai(data);}
+        else if ("tumo" in data) {catchTumoHai(data);}
+        else if ("sutehai" in data) {catchDiscardHai(data.sutehai);}
+        else if ("done_user" in data) {catchAgariUser(data);}
+        else if ("done_game" in data) {setGameEnd(true);}
+        else if ("return_result" in data) {catchResult(data)}
+        else {
+            console.log("no appropriate type");
+            console.log(data);
+        }
+    });
+
+    const catchHaipai = (data: any) => {
+        let tehai = StringToHaiArray(data.tehai);
+        SortHaiArray(tehai);
+        setPlayerTehai(tehai);
         if (isGM) {
-            sendTumoHai(room_id, users[0], popYama());
+            // sendTumoHai(room_id, users[0], popYama());
+            const timeoutId = setTimeout(() => {
+                console.log("exec timeout");
+                sendTumoHai(room_id, users[0], popYama());
+            }, 1000);
+            // clearTimeout(timeoutId);
         }
     };
 
-    const catchTumoHai = new WebSocket(WS_URL+"?????");
-    catchTumoHai.onmessage = function (event) {
-        const data = event.data;
+    const catchTumoHai = function (data: any) {
+        if (gameEnd) {return;}
+        // すでにあがっている場合の処理
         if (agariUsers[users.indexOf(player_name)]) {
-            sendDiscardHai(room_id, player_name, data.hai);
+            const timeoutId = setTimeout(() => {
+                sendDiscardHai(room_id, player_name, StringToHai(data.tumo));
+            }, 1000);
             return;
         }
-        setPlayerTehai([...playerTehai, StringToHai(data.hai)]);
+        console.log(data.tumo);
+        // 通常時
+        setPlayerTehai([...playerTehai, StringToHai(data.tumo)]);
         setIsMyTurn(true);
     }
 
-    const catchDiscardHai = new WebSocket(WS_URL+"?????");
-    catchDiscardHai.onmessage = function(event) {
-        const data = event.data;
-        const newKawas = kawas;
+    const catchDiscardHai = function(data: any) {
+        if (gameEnd) {return;}
+        const newKawas = [...kawas];
         const user_ind = users.indexOf(data.user_name);
         newKawas[user_ind].push(StringToHai(data.hai));
         setKawas(newKawas);
@@ -225,31 +278,31 @@ const OnLineGame = () => {
         }
     }
 
-    const catchAgariUser = new WebSocket(WS_URL+"?????");
-    catchAgariUser.onmessage = function(event) {
-        const data = event.data;
-        const newAgariUsers = agariUsers;
-        newAgariUsers[users.indexOf(data.user_name)] = true;
+    const catchAgariUser = function(data: any) {
+        const newAgariUsers = [...agariUsers];
+        newAgariUsers[users.indexOf(data.done_user)] = true;
         setAgariUsers(newAgariUsers);
+        sendTumoHai(room_id, users[(users.indexOf(data.done_user)+1)%4], popYama());
     }
 
-    const catchResult = new WebSocket(WS_URL+"??????");
-    catchResult.onmessage = function(event) {
-        const data = event.data;
-        const newPoints = ["", "", "", ""];
-        data.result.map((r: {user_name: string, point: string}) => {
-            newPoints[users.indexOf(r.user_name)] = r.point;
+    const catchResult =  function(data: any) {
+        const defaultResult: Result = {tehai: [UNDEFINED_HAI], point: "mitei", ai_id: -1};
+        const newResults: Result[] = [defaultResult, defaultResult, defaultResult, defaultResult];
+        data.return_result.map((r: {user_name: string, result: string}) => {
+            const [tehai, point, ai_id] = r.result.split(';');
+            newResults[users.indexOf(r.user_name)] = {tehai: StringToHaiArray(tehai), point: point, ai_id: parseInt(ai_id)};
         });
-        setPoints(newPoints);
+        setResults(newResults);
     }
 
 
     // 関数定義
     const popYama = (): HaiInfo => {
-		const lastHai: HaiInfo | undefined = yama.pop();
-		const newYama = [...yama];
-		setYama(newYama);
-		return lastHai || UNDEFINED_HAI;
+		// const newYama = [...yama];
+		// const lastHai: HaiInfo | undefined = newYama.pop();
+		// setYama(newYama);
+		// return lastHai || UNDEFINED_HAI;
+		return cyama.pop() || UNDEFINED_HAI;
 	};
 
     const discard = (targetHai: HaiInfo): boolean => {
@@ -267,29 +320,84 @@ const OnLineGame = () => {
 		return false;
 	};
 
-    const agari = () => {
+    const agari = (ai_id: number) => {
+        setIsMyTurn(false);
         sendAgariUser(room_id, player_name);
-
+        calcPoint(room_id, player_name, playerTehai, ai_id);
     }
 
     const startGame = (): void => {
-        const newYama = makeYama();
+        // const newYama = makeYama();
         const haipai:NameAndTehai[] = [];
         for (let i = 0; i < 4; i++) {
             let tmp:string[] = [];
             for (let j = 0; j < 13; j++) {
-                const hai = newYama.pop();
+                const hai = cyama.pop();
                 tmp.push(HaiToString(hai || UNDEFINED_HAI));
             }
             haipai.push({user_name: users[i], tehai: tmp.join(',')});
         }
+        // setYama(newYama);
         sendHaipai({room_id: room_id, haipai: haipai});
     }
 
     return (
-        <>
-            <button onClick={startGame}>ゲーム開始</button>
-        </>
+        <div className="text-black">
+            {isGM?
+            <button onClick={startGame}>ゲーム開始</button>:<></>
+            }
+            {isMyTurn && !agariUsers[player_index] ? (
+                <>
+                    <Player
+                        tehai={playerTehai}
+                        kawa={kawas[player_index]}
+                        discardMethod={discard}
+                    />
+                    <button onClick={() => {agari(3)}}>あがり</button>
+                </>
+            ) : (
+                <>
+                    <UnTurnHai
+                        tehai={playerTehai}
+                        kawa={kawas[player_index]}
+                    />
+                </>
+            )}
+            {
+                [1,2,3].map ((i) => (
+                    <div key={i}>
+                        <p>{users[(player_index+i)%4]}</p>
+                        <Oponent tehai={playerTehai} kawa={kawas[(player_index+i)%4]}/>
+                    </div>
+                )) 
+            }
+            {results === null ? (
+                <></>
+            ) : (
+                <>
+                    <h2>結果</h2>
+                    <button onClick={() => saveResult(results[player_index].tehai, results[player_index].point, results[player_index].ai_id)}>自分の結果を保存する</button>
+                    <div>
+                        <p>{player_name}</p>
+                        <p>{aiNames[results[player_index].ai_id-1]}</p>
+                        <p>{results[player_index].point}</p>
+                        {results[player_index].tehai.map((hai, i) => (
+                            <Hai hai={hai} key={i}/>
+                        ) )}
+                    </div>
+                    {[1,2,3].map ((i) => (
+                    <div key={i}>
+                        <p>{users[(player_index+i)%4]}</p>
+                        <p>{aiNames[results[(player_index+i)%4].ai_id-1]}</p>
+                        <p>{results[(player_index+i)%4].point}</p>
+                        {results[(player_index+i)%4].tehai.map((hai, i) => (
+                            <Hai hai={hai} key={i}/>
+                        ) )}
+                    </div>
+                    )) }
+                </>
+            )}
+        </div>
     )
 }
 
