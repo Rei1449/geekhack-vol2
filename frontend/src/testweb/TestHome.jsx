@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 
-const Home = () => {
+const TestHome = () => {
   const [userName, setUserName] = useState("");
   const [entryId, setEntryId] = useState("");
   const localUserName = localStorage.getItem("name")
@@ -64,4 +64,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default TestHome

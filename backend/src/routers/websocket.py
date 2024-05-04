@@ -1,3 +1,4 @@
+from sqlite3 import connect
 from fastapi import APIRouter, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
@@ -62,11 +63,13 @@ class ConnectionManager:
       for name in room_list:
         await self.active_connections[name].send_json({"game_start":"ゲームを開始します"})
 
-    async def distribute_hand(self, room_id: str, haipai: List):
-      for i, val in enumerate(haipai):
-        name = list(val.keys())
-        tehai = list(val.values())
-        await self.active_connections[name[0]].send_json({"tehai":tehai[0]})
+    # async def distribute_hand(self, room_id: str, haipai: Haipai):
+      # for i, val in enumerate(haipai):
+        # name = list(val.keys())
+        # tehai = list(val.values())
+        # await self.active_connections[name[0]].send_json({"tehai":tehai[0]})
+    async def distribute_hand(self, room_id: str, name: str, tehai: str):
+      await self.active_connections[name].send_json({"tehai":tehai})
     
     async def draw_tile(self, room_id: str, client_name: str, hai: str):
       await self.active_connections[client_name].send_json({"tumo":hai})
@@ -88,8 +91,8 @@ class ConnectionManager:
           await self.active_connections[name].send_json({"done_game":"ゲーム終了"})
           rds.lpop(done_users)
 
-    async def game_store(self, room_id: str, client_name: str, tehai: str, point: str):
-      result = tehai + ";" + point
+    async def game_store(self, room_id: str, client_name: str, tehai: str, point: str, ai_id:str):
+      result = tehai + ";" + point + ";" + ai_id
       rds.set(client_name, result)
       game_result = room_id + "finish"
       rds.rpush(game_result, client_name)
@@ -131,10 +134,14 @@ class User(BaseModel):
 class RoomUser(BaseModel):
   user_name: str
   room_id: str
+  
+class Haipai(BaseModel):
+  user_name: str
+  tehai: str
 
 class Distribute(BaseModel):
   room_id: str
-  haipai: List
+  haipai: List[Haipai]
 
 class Hai(BaseModel):
   user_name: str
@@ -146,6 +153,7 @@ class GameStore(BaseModel):
   room_id: str
   tehai: str
   point: str
+  ai_id: str
 
 @router.post("/create_room")
 async def create_room(create:User):
@@ -158,9 +166,9 @@ async def create_room(create:User):
     return {"error":"ルーム作成に失敗しました"}
   
 @router.post("/close_room")
-async def create_room(close:RoomUser):
+async def close_room(close:RoomUser):
   await manager.close_room(close.room_id, close.user_name, False)
-  return {"close_room":部屋を閉じました}
+  return {"close_room":"部屋を閉じました"}
 
 @router.post("/entry_room")
 async def entry_room(entry:RoomUser):
@@ -189,7 +197,9 @@ async def leave_room(game:RoomUser):
 
 @router.post("/distribute_hand")
 async def distribute_hand(distribute:Distribute):
-  await manager.distribute_hand(distribute.room_id, distribute.haipai)
+  # await manager.distribute_hand(distribute.room_id, distribute.haipai)
+  for haipai in distribute.haipai:
+    await manager.distribute_hand(distribute.room_id, haipai.user_name, haipai.tehai)
   return {"finish":"手牌を配り終えました"}
 
 @router.post("/draw_tile")
@@ -209,5 +219,5 @@ async def done(done:RoomUser):
 
 @router.post("/game_store")
 async def game_store(game:GameStore):
-  await manager.game_store(game.room_id, game.user_name, game.tehai, game.point)
+  await manager.game_store(game.room_id, game.user_name, game.tehai, game.point, game.ai_id)
   return {"result_store":"結果が保存されました"}
