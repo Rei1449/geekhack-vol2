@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { HaiInfo } from "../types/HaiInfo";
 import makeYama from "./Functions/MakeYama";
 import { AI_NAMES, ENDPOINT_URL, UNDEFINED_HAI, USER_NAME_KEY, WS_URL } from "./constants";
