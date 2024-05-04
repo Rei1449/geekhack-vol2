@@ -58,6 +58,7 @@ const EntryRoom = () => {
 
   const catchGameStart = (data: any) => {
     console.log("catch gamestart");
+    console.log(data);
     navigate("/onlinegame", {state: {users: users, isGM: false, room_id: entryId}});
   };
 
