@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HaiInfo } from "../types/HaiInfo";
 import makeYama from "./Functions/MakeYama";
 import { AI_NAMES, ENDPOINT_URL, UNDEFINED_HAI, USER_NAME_KEY, WS_URL } from "./constants";
@@ -208,6 +208,18 @@ const OnLineGame = () => {
     });
 
     const cyama = makeYama();
+    // let cyama: any;
+    // useEffect(() => {
+    //     cyama = makeYama();
+        // WebSocketオブジェクトの作成
+        // const ws = new WebSocket('ws://example.com');
+
+        // コンポーネントがアンマウントされたときにWebSocketをクローズする
+        // return () => {
+        //     ws.close();
+        // };
+    // }, []); // 初回レンダリング時のみ実行されるように空の依存配列を指定
+
     console.log(cyama);
 
     // state定義
@@ -244,7 +256,7 @@ const OnLineGame = () => {
         setPlayerTehai(tehai);
         if (isGM) {
             // sendTumoHai(room_id, users[0], popYama());
-            const timeoutId = setTimeout(() => {
+            setTimeout(() => {
                 console.log("exec timeout");
                 sendTumoHai(room_id, users[0], popYama());
             }, 1000);
@@ -256,7 +268,7 @@ const OnLineGame = () => {
         if (gameEnd) {return;}
         // すでにあがっている場合の処理
         if (agariUsers[users.indexOf(player_name)]) {
-            const timeoutId = setTimeout(() => {
+            setTimeout(() => {
                 sendDiscardHai(room_id, player_name, StringToHai(data.tumo));
             }, 1000);
             return;
@@ -382,7 +394,9 @@ const OnLineGame = () => {
                         <p>{aiNames[results[player_index].ai_id-1]}</p>
                         <p>{results[player_index].point}</p>
                         {results[player_index].tehai.map((hai, i) => (
-                            <Hai hai={hai} key={i}/>
+                            <div className="inline-block">
+                                <Hai hai={hai} key={i}/>
+                            </div>
                         ) )}
                     </div>
                     {[1,2,3].map ((i) => (
@@ -391,7 +405,9 @@ const OnLineGame = () => {
                         <p>{aiNames[results[(player_index+i)%4].ai_id-1]}</p>
                         <p>{results[(player_index+i)%4].point}</p>
                         {results[(player_index+i)%4].tehai.map((hai, i) => (
-                            <Hai hai={hai} key={i}/>
+                            <div className="inline-block">
+                                <Hai hai={hai} key={i}/>
+                            </div>
                         ) )}
                     </div>
                     )) }
