@@ -10,7 +10,7 @@ import {
 	USER_NAME_KEY,
 } from "./components/game/Constants";
 import type { HaiInfo } from "./types/HaiInfo";
-
+import { useQuery } from "@tanstack/react-query";
 type rankingData = {
 	hand: string;
 	id: number;
@@ -105,6 +105,7 @@ export default function Home() {
 			console.log("error");
 		}
 	};
+
 	const [isChoose, setIsChoose] = useState<number>(1);
 	const item = localStorage.getItem(USER_NAME_KEY);
 	useEffect(() => {

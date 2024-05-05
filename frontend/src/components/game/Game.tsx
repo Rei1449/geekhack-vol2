@@ -1,16 +1,16 @@
 import "../../index.css";
-import type { HaiInfo } from "../../types/HaiInfo.tsx";
+import type { HaiInfo } from "../../types/HaiInfo";
 import { useState, useEffect } from "react";
-import Player from "./Player.tsx";
-import Oponent from "./Oponent.tsx";
-import AgariButton from "./AgariButton.tsx";
+import Player from "./Player";
+import Oponent from "./Oponent";
+import AgariButton from "./AgariButton";
 import {
 	GetHaiName,
 	ShuffleArray,
 	IsSameHai,
 	SortHaiArray,
-} from "./CommonMethods.tsx";
-import { ENDPOINT_URL, UNDEFINED_HAI, aiNames } from "./Constants.tsx";
+} from "./CommonMethods";
+import { ENDPOINT_URL, UNDEFINED_HAI, aiNames } from "./Constants";
 
 import {
 	Dialog,
