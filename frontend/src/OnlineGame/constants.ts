@@ -1,6 +1,6 @@
 import { HaiInfo } from "../types/HaiInfo";
 
-export const UNDEFINED_HAI: HaiInfo = { kind: -1, number: -1 };
+export const UNDEFINED_HAI: HaiInfo = { kind: 0, number: 0 };
 export const AI_NAMES: string[] = ["llama", "chatgpt", "gemini"];
 
 export const WS_URL: string = "ws://localhost:8080/";
