@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "../dialog";
-import { Link } from "react-router-dom";
+
 import { EntryRoom } from "../OnlineGame/EntryRoom";
 import MakeRoom from "../OnlineGame/MakeRoom";
 

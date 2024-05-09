@@ -10,7 +10,7 @@ import {
 	USER_NAME_KEY,
 } from "./components/game/Constants";
 import type { HaiInfo } from "./types/HaiInfo";
-import { useQuery } from "@tanstack/react-query";
+//import { useQuery } from "@tanstack/react-query";
 type rankingData = {
 	hand: string;
 	id: number;
