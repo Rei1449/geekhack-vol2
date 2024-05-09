@@ -6,7 +6,7 @@ import "./index.css";
 import {
 	QueryClient,
 	QueryClientProvider,
-	useQuery,
+	//useQuery,
 } from "@tanstack/react-query";
 const queryClient = new QueryClient();
 
