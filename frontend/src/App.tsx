@@ -14,9 +14,11 @@ import Login from "./Login";
 import { USER_NAME_KEY } from "./components/game/Constants";
 
 import Register from "./Register";
+
 import OnLineGame from "./OnlineGame/OnLineGame";
 import MakeRoom from "./OnlineGame/MakeRoom";
 import EntryRoom from "./OnlineGame/EntryRoom";
+import Room from "./Room/Room";
 
 function App() {
 	const item = localStorage.getItem(USER_NAME_KEY);
@@ -35,6 +37,7 @@ function App() {
 						<Route path="/login" element={<Login />} />
 						<Route path="/register" element={<Register />} />
 						<Route path="/onlinegame" element={<Login />} />
+						<Route path="/online-readey" element={<Login />} />
 					</>
 				) : (
 					<>
@@ -49,6 +52,7 @@ function App() {
 						<Route path="/onlinegame" element={<OnLineGame />} />
 						<Route path="/makeroom" element={<MakeRoom />} />
 						<Route path="/entryroom" element={<EntryRoom />} />
+						<Route path="/online-readey" element={<Room />} />
 					</>
 				)}
 			</Routes>
