@@ -146,7 +146,7 @@ const Game = () => {
 			stringTehai.push(GetHaiName(hai));
 		});
 		const res = await fetch(
-			`https://hack-fast-api-65ce6a3d3ac6.herokuapp.com/api/${num}`,
+			`https://geekhack-three-fa2gxhztza-an.a.run.app/api/${num}`,
 			{
 				method: "POST",
 				headers: {
