@@ -10,7 +10,7 @@ import {
 	USER_NAME_KEY,
 } from "./components/game/Constants";
 import type { HaiInfo } from "./types/HaiInfo";
-
+//import { useQuery } from "@tanstack/react-query";
 type rankingData = {
 	hand: string;
 	id: number;
@@ -105,6 +105,7 @@ export default function Home() {
 			console.log("error");
 		}
 	};
+
 	const [isChoose, setIsChoose] = useState<number>(1);
 	const item = localStorage.getItem(USER_NAME_KEY);
 	useEffect(() => {
@@ -350,9 +351,13 @@ export default function Home() {
 						<Link
 							className="duration-200  hover:bg-[#38b48b] text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]"
 							to="/game">
-							Play Three →
+							Play Three solo →
 						</Link>
-
+						<Link
+							className="duration-200 mt-5  hover:bg-[#38b48b] text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]"
+							to="/online-readey">
+							Play Three <span className="text-origin">online→</span>
+						</Link>
 						<Dialog>
 							<DialogTrigger className="duration-200 hover:bg-[#38b48b] mt-5 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
 								show record →
