@@ -37,7 +37,7 @@ function App() {
 						<Route path="/login" element={<Login />} />
 						<Route path="/register" element={<Register />} />
 						<Route path="/onlinegame" element={<Login />} />
-						<Route path="/online-readey" element={<Login />} />
+						<Route path="/online-ready" element={<Login />} />
 					</>
 				) : (
 					<>
@@ -52,7 +52,7 @@ function App() {
 						<Route path="/onlinegame" element={<OnLineGame />} />
 						<Route path="/makeroom" element={<MakeRoom />} />
 						<Route path="/entryroom" element={<EntryRoom />} />
-						<Route path="/online-readey" element={<Room />} />
+						<Route path="/online-ready" element={<Room />} />
 					</>
 				)}
 			</Routes>
