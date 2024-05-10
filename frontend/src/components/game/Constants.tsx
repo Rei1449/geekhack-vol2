@@ -4,7 +4,7 @@ import type { ResultData } from "../../types/ResultData";
 export const UNDEFINED_HAI: HaiInfo = { kind: -1, number: -1 };
 
 export const ENDPOINT_URL: string =
-	"https://hack-fast-api-65ce6a3d3ac6.herokuapp.com/";
+	"https://geekhack-three-fa2gxhztza-an.a.run.app/";
 
 export const aiNames: string[] = ["llama", "chatgpt", "gemini"];
 
