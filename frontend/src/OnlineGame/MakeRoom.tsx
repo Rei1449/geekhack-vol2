@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ENDPOINT_URL, USER_NAME_KEY, WS_URL } from "./constants";
 import { EntryRoom_T, GameStart_T } from "./types";
@@ -61,23 +61,27 @@ const MakeRoom = () => {
 		console.log(data);
 	};
 
+
 	// webSocket
-	const wb = new WebSocket(WS_URL + `ws/${localUserName}/room/${entryId}`);
-	wb.addEventListener("message", function (event) {
-		const data = JSON.parse(event.data);
-		console.log("onmessage");
-		console.log(data);
-		if ("entry" in data) {
-			catchParticipant(data);
-			return;
-		}
-		if ("game_start" in data) {
-			catchGameStart(data);
-			return;
-		}
-		console.log("no appropriate type");
-		console.log(data);
-	});
+	useEffect(() => {
+		if (entryId == "") {return;}
+		const wb = new WebSocket(WS_URL+`ws/${localUserName}/room/${entryId}`);
+		wb.addEventListener("message", function(event) {
+			const data = JSON.parse(event.data);
+			console.log("onmessage");
+			console.log(data);
+			if ("entry" in data) {
+				catchParticipant(data); 
+				return;
+			}
+			if ("game_start" in data) {
+				catchGameStart(data); 
+				return;
+			}
+			console.log("no appropriate type");
+			console.log(data);
+		});
+	}, [users, entryId]);
 
 	const catchParticipant = (data: EntryRoom_T) => {
 		console.log("catch participant");
