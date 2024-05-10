@@ -8,7 +8,7 @@ import {
 	USER_NAME_KEY,
 	WS_URL,
 } from "./constants";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { HaiToString } from "./Functions/HaiToString";
 import { StringToHaiArray } from "./Functions/StringToHaiArray";
 import { StringToHai } from "./Functions/StringToHai";
@@ -24,6 +24,7 @@ import Hai from "../components/game/Hai";
 
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "../dialog";
 
+import ViewTehai from "../components/game/ViewTehai";
 type Input = {
 	users: string[];
 	isGM: boolean;
@@ -406,11 +407,12 @@ const OnLineGame = () => {
 		}
 		return false;
 	};
-
+	const [isAgari, setIsAgari] = useState<boolean>(false);
 	const agari = (ai_id: number) => {
 		setIsMyTurn(false);
 		sendAgariUser(room_id, player_name);
 		calcPoint(room_id, player_name, playerTehai, ai_id);
+		setIsAgari(true);
 	};
 
 	const startGame = (): void => {
@@ -427,27 +429,74 @@ const OnLineGame = () => {
 		}
 		// setYama(newYama);
 		sendHaipai({ room_id: room_id, haipai: haipai });
+		setIsNowGM(true);
 	};
 	const [num, setNum] = useState<number>(0);
 	const handleAiNum = (num: number) => {
 		setNum(num);
 	};
+	const [isNowGM, setIsNowGM] = useState(false);
+
 	return (
 		<div className="w-screen h-screen bg-[#151515] p-10">
-			{isGM ? <button onClick={startGame}>ゲーム開始</button> : <></>}
+			{results !== null && (
+				<div className="fixed z-30 bg-black w-screen h-screen top-0 left-0"></div>
+			)}
+
+			{isGM && (
+				<>
+					{isNowGM ? (
+						<></>
+					) : (
+						<>
+							<button
+								onClick={startGame}
+								className="fixed z-40 top-[55%] left-[0%] right-[0%] m-auto duration-200 hover:bg-[#38b48b] mt-5 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[50px]">
+								ゲーム開始
+							</button>
+						</>
+					)}
+				</>
+			)}
+			{isAgari && (
+				<p className="text-[#38b48b] z-20 font-bold text-4xl fixed bottom-[20%] left-[5%]">
+					あがりました！
+				</p>
+			)}
 			{isMyTurn && !agariUsers[player_index] ? (
 				<>
+					{isMyTurn === true && (
+						<p className="text-orange-500 font-bold text-4xl fixed bottom-[20%] left-[5%]">
+							Now your turn.
+						</p>
+					)}
 					<Player
 						tehai={playerTehai}
 						kawa={kawas[player_index]}
 						discardMethod={discard}
 					/>
 					<Dialog>
-						<DialogTrigger className="duration-200 hover:bg-[#38b48b] mt-5 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
+						<DialogTrigger className="fixed bottom-[20%] right-[5%] z-30 bg-[#151515] duration-200 hover:bg-[#38b48b] mt-5 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
 							あがる →
 						</DialogTrigger>
 						<DialogContent className="text-white overflow-y-scroll nobar bg-origin border-gray-800 min-w-[70%] p-20 h-[80%]">
 							<DialogHeader>
+								<p className="text-white flex items-center">
+									<span className="text-xl">Tehai</span>
+								</p>
+								<div className="flex">
+									{playerTehai.map((hai, index) => {
+										if (index < 13) {
+											return <ViewTehai hai={hai} key={index} />;
+										} else {
+											return (
+												<div className="ml-4" key={index}>
+													<ViewTehai hai={hai} />
+												</div>
+											);
+										}
+									})}
+								</div>
 								<div className="text-white flex items-center ">
 									<span className="mt-10 text-xl">Select AI</span>
 								</div>
@@ -510,50 +559,105 @@ const OnLineGame = () => {
 					<UnTurnHai tehai={playerTehai} kawa={kawas[player_index]} />
 				</>
 			)}
-			{[1, 2, 3].map((i) => (
-				<div key={`oponent${i}`}>
-					<p>{users[(player_index + i) % 4]}</p>
-					<Oponent tehai={playerTehai} kawa={kawas[(player_index + i) % 4]} />
-				</div>
-			))}
+			<div className="relative z-20 bg-[#151515] w-[60%] overflow-scroll m-auto min-h-[580px] max-h-[580px]">
+				{[0, 1, 2, 3].map((i) => (
+					<div
+						key={`oponent${i}`}
+						className=" m-auto flex items-start border-b border-gray-600 pt-5">
+						<div className="w-[200px] overflow-x-scroll mt-5">
+							<p className="text-xs">player</p>
+							<p className="text-4xl">{users[(player_index + i) % 4]}</p>
+						</div>
+						<Oponent tehai={playerTehai} kawa={kawas[(player_index + i) % 4]} />
+					</div>
+				))}
+			</div>
+
 			{results === null ? (
-				<>{gameEnd ? <p>点数計算中</p> : <></>}</>
-			) : (
 				<>
-					<h2>結果</h2>
-					<button
-						onClick={() =>
-							saveResult(
-								results[player_index].tehai,
-								results[player_index].point,
-								results[player_index].ai_id
-							)
-						}>
-						自分の結果を保存する
-					</button>
-					<div>
-						<p>{player_name}</p>
-						<p>{aiNames[results[player_index].ai_id - 1]}</p>
-						<p>{results[player_index].point}</p>
+					{gameEnd ? (
+						<div className="z-50 flex items-center fixed top-[50%] left-[0%] right-[0%] w-fit m-auto">
+							<div className="loader"></div>
+							<p className="text-pink-700 ml-5">点数計算中</p>
+						</div>
+					) : (
+						<></>
+					)}
+				</>
+			) : (
+				<div className="shadow rounded-[20px] z-50 text-white overflow-y-scroll nobar bg-origin border-gray-800 max-w-[70%] px-20 py-10 h-[80%] fixed top-[0%] bottom-[0%] m-auto left-[0%] right-[0%]">
+					<div className="flex items-center justify-between">
+						<h2 className="text-6xl">Result</h2>
+						<div>
+							<button
+								className=" duration-200 hover:bg-[#38b48b] mt-5 text-md block border border-gray-500 rounded-[20px] w-[250px] text-center p-[10px]"
+								onClick={() =>
+									saveResult(
+										results[player_index].tehai,
+										results[player_index].point,
+										results[player_index].ai_id
+									)
+								}>
+								自分の結果を保存する
+							</button>
+							<Link
+								className="duration-200  hover:bg-[#38b48b] mt-5 text-xl block border border-gray-500 rounded-[20px] w-[250px] text-center p-[10px]"
+								to="/">
+								HOME →
+							</Link>
+						</div>
+					</div>
+
+					{/* <div className="mt-5">
+						<div className="flex items-center">
+							<div>
+								<p className="text-4xl">{player_name}</p>
+								<p className="text-gray-400">
+									{aiNames[results[player_index].ai_id - 1]}
+								</p>
+							</div>
+							<p className="ml-5 text-4xl text-origin">
+								{results[player_index].point}
+							</p>
+						</div>
+
 						{results[player_index].tehai.map((hai, i) => (
 							<div className="inline-block" key={i}>
 								<Hai hai={hai} />
 							</div>
 						))}
-					</div>
-					{[1, 2, 3].map((i) => (
-						<div key={i}>
-							<p>{users[(player_index + i) % 4]}</p>
-							<p>{aiNames[results[(player_index + i) % 4].ai_id - 1]}</p>
-							<p>{results[(player_index + i) % 4].point}</p>
-							{results[(player_index + i) % 4].tehai.map((hai, i) => (
-								<div className="inline-block">
-									<Hai hai={hai} key={i} />
+					</div> */}
+					{[0, 1, 2, 3]
+						.map((i) => ({
+							index: i,
+							point: results[(player_index + i) % 4].point,
+						}))
+						.sort((a, b): number => Number(b.point) - Number(a.point))
+						.map(({ index }) => (
+							<div key={index} className="mt-5">
+								<div className="flex items-center">
+									<div>
+										<p className="text-4xl">
+											{users[(player_index + index) % 4]}
+										</p>
+										<p className="text-gray-400">
+											{aiNames[results[(player_index + index) % 4].ai_id - 1]}
+										</p>
+									</div>
+
+									<p className="ml-5 text-4xl text-origin">
+										{results[(player_index + index) % 4].point}
+									</p>
 								</div>
-							))}
-						</div>
-					))}
-				</>
+
+								{results[(player_index + index) % 4].tehai.map((hai, i) => (
+									<div className="inline-block">
+										<Hai hai={hai} key={i} />
+									</div>
+								))}
+							</div>
+						))}
+				</div>
 			)}
 		</div>
 	);

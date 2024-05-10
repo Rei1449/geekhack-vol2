@@ -355,7 +355,7 @@ export default function Home() {
 						</Link>
 						<Link
 							className="duration-200 mt-5  hover:bg-[#38b48b] text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]"
-							to="/online-readey">
+							to="/online-ready">
 							Play Three <span className="text-origin">online→</span>
 						</Link>
 						<Dialog>
