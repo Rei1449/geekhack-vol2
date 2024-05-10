@@ -61,21 +61,22 @@ const MakeRoom = () => {
 		console.log(data);
 	};
 
-
 	// webSocket
 	useEffect(() => {
-		if (entryId == "") {return;}
-		const wb = new WebSocket(WS_URL+`ws/${localUserName}/room/${entryId}`);
-		wb.addEventListener("message", function(event) {
+		if (entryId == "") {
+			return;
+		}
+		const wb = new WebSocket(WS_URL + `ws/${localUserName}/room/${entryId}`);
+		wb.addEventListener("message", function (event) {
 			const data = JSON.parse(event.data);
 			console.log("onmessage");
 			console.log(data);
 			if ("entry" in data) {
-				catchParticipant(data); 
+				catchParticipant(data);
 				return;
 			}
 			if ("game_start" in data) {
-				catchGameStart(data); 
+				catchGameStart(data);
 				return;
 			}
 			console.log("no appropriate type");
@@ -160,7 +161,7 @@ const MakeRoom = () => {
 						key={i}
 						className="w-full border border-gray-700 rounded-[20px] p-10">
 						<p className="text-md">player</p>
-						<p className="text-6xl overflow-scroll">{user}</p>
+						<p className="text-6xl overflow-scroll nobar">{user}</p>
 					</div>
 				))}
 			</div>

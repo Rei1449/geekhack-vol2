@@ -564,7 +564,7 @@ const OnLineGame = () => {
 					<div
 						key={`oponent${i}`}
 						className=" m-auto flex items-start border-b border-gray-600 pt-5">
-						<div className="w-[200px] overflow-x-scroll mt-5">
+						<div className="w-[200px] overflow-x-scroll nobar mt-5">
 							<p className="text-xs">player</p>
 							<p className="text-4xl">{users[(player_index + i) % 4]}</p>
 						</div>
