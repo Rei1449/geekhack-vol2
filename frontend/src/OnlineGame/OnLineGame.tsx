@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HaiInfo } from "../types/HaiInfo";
 import makeYama from "./Functions/MakeYama";
 import { AI_NAMES, ENDPOINT_URL, UNDEFINED_HAI, USER_NAME_KEY, WS_URL } from "./constants";
@@ -15,6 +15,7 @@ import Oponent from "../components/game/Oponent";
 import UnTurnHai from "../components/game/UnTurnHai";
 import { aiNames } from "../components/game/Constants";
 import Hai from "../components/game/Hai";
+
 
 type Input = {
     users: string[],
@@ -49,7 +50,7 @@ const sendHaipai = async (haipai: HaiPai) => {
     });
     if (res.ok) {
         const data = await res.json();
-        console.log(data.tehai);
+        console.log(data);
     } else {
         console.log("error");
     }
@@ -207,7 +208,7 @@ const OnLineGame = () => {
         }
     });
 
-    const cyama = makeYama();
+    // const cyama = makeYama();
     // let cyama: any;
     // useEffect(() => {
     //     cyama = makeYama();
@@ -220,8 +221,6 @@ const OnLineGame = () => {
         // };
     // }, []); // 初回レンダリング時のみ実行されるように空の依存配列を指定
 
-    console.log(cyama);
-
     // state定義
     // const [yama, setYama] = useState<HaiInfo[]>([]);
     const [playerTehai, setPlayerTehai] = useState<HaiInfo[]>([]);
@@ -231,29 +230,43 @@ const OnLineGame = () => {
     const [results, setResults] = useState<Result[] | null>(null);
     const [gameEnd, setGameEnd] = useState<boolean>(false);
 
+    const ryama = useRef(makeYama());
+
+    console.log(ryama);
+    console.log(playerTehai);
+
     // console.log(yama);
     // WebSocket定義
-    const wb = new WebSocket(WS_URL+`ws/${player_name}/room/${room_id}`);
-    wb.addEventListener("message", function(event) {
-        const data = JSON.parse(event.data);
-        console.log("onmessage");
-        console.log(data);
-        if ("tehai" in data) {catchHaipai(data);}
-        else if ("tumo" in data) {catchTumoHai(data);}
-        else if ("sutehai" in data) {catchDiscardHai(data.sutehai);}
-        else if ("done_user" in data) {catchAgariUser(data);}
-        else if ("done_game" in data) {setGameEnd(true);}
-        else if ("return_result" in data) {catchResult(data)}
-        else {
-            console.log("no appropriate type");
+    useEffect(() => {
+        console.log("websocket open")
+        const wb = new WebSocket(WS_URL+`ws/${player_name}/room/${room_id}`);
+        wb.addEventListener("message", function(event) {
+            const data = JSON.parse(event.data);
+            console.log("onmessage");
             console.log(data);
+            if ("tehai" in data) {catchHaipai(data);}
+            else if ("tumo" in data) {catchTumoHai(data);}
+            else if ("sutehai" in data) {catchDiscardHai(data.sutehai);}
+            else if ("done_user" in data) {catchAgariUser(data);}
+            else if ("done_game" in data) {setGameEnd(true);}
+            else if ("return_result" in data) {catchResult(data)}
+            else {
+                console.log("no appropriate type");
+                console.log(data);
+            } 
+        });
+        return () => {
+            // wb.close();
+            console.log("websocket closed");
         }
-    });
+    }, [agariUsers, gameEnd]);
 
     const catchHaipai = (data: any) => {
         let tehai = StringToHaiArray(data.tehai);
         SortHaiArray(tehai);
         setPlayerTehai(tehai);
+        console.log("catchHaipai");
+        // console.log(yama);
         if (isGM) {
             // sendTumoHai(room_id, users[0], popYama());
             setTimeout(() => {
@@ -268,14 +281,14 @@ const OnLineGame = () => {
         if (gameEnd) {return;}
         // すでにあがっている場合の処理
         if (agariUsers[users.indexOf(player_name)]) {
-            setTimeout(() => {
+            // setTimeout(() => {
                 sendDiscardHai(room_id, player_name, StringToHai(data.tumo));
-            }, 1000);
+            // }, 1000);
             return;
         }
         console.log(data.tumo);
         // 通常時
-        setPlayerTehai([...playerTehai, StringToHai(data.tumo)]);
+        setPlayerTehai(playerTehai => [...playerTehai, StringToHai(data.tumo)]);
         setIsMyTurn(true);
     }
 
@@ -294,7 +307,9 @@ const OnLineGame = () => {
         const newAgariUsers = [...agariUsers];
         newAgariUsers[users.indexOf(data.done_user)] = true;
         setAgariUsers(newAgariUsers);
-        sendTumoHai(room_id, users[(users.indexOf(data.done_user)+1)%4], popYama());
+        if (isGM) {
+            sendTumoHai(room_id, users[(users.indexOf(data.done_user)+1)%4], popYama());
+        }
     }
 
     const catchResult =  function(data: any) {
@@ -310,11 +325,15 @@ const OnLineGame = () => {
 
     // 関数定義
     const popYama = (): HaiInfo => {
+        // console.log(yama);
 		// const newYama = [...yama];
-		// const lastHai: HaiInfo | undefined = newYama.pop();
+        // console.log(newYama);
+		// const lastHai = newYama.pop();
 		// setYama(newYama);
+        // console.log(newYama);
+        // console.log(lastHai);
 		// return lastHai || UNDEFINED_HAI;
-		return cyama.pop() || UNDEFINED_HAI;
+		return ryama.current.pop() || UNDEFINED_HAI;
 	};
 
     const discard = (targetHai: HaiInfo): boolean => {
@@ -344,7 +363,8 @@ const OnLineGame = () => {
         for (let i = 0; i < 4; i++) {
             let tmp:string[] = [];
             for (let j = 0; j < 13; j++) {
-                const hai = cyama.pop();
+                const hai = ryama.current.pop();
+                // const hai = newYama.pop();
                 tmp.push(HaiToString(hai || UNDEFINED_HAI));
             }
             haipai.push({user_name: users[i], tehai: tmp.join(',')});
@@ -377,14 +397,20 @@ const OnLineGame = () => {
             )}
             {
                 [1,2,3].map ((i) => (
-                    <div key={i}>
+                    <div key={`oponent${i}`}>
                         <p>{users[(player_index+i)%4]}</p>
                         <Oponent tehai={playerTehai} kawa={kawas[(player_index+i)%4]}/>
                     </div>
                 )) 
             }
             {results === null ? (
-                <></>
+                <>
+                    {gameEnd? (
+                        <p>点数計算中</p>
+                    ) : (
+                        <></>
+                    )}
+                </>
             ) : (
                 <>
                     <h2>結果</h2>
@@ -394,8 +420,8 @@ const OnLineGame = () => {
                         <p>{aiNames[results[player_index].ai_id-1]}</p>
                         <p>{results[player_index].point}</p>
                         {results[player_index].tehai.map((hai, i) => (
-                            <div className="inline-block">
-                                <Hai hai={hai} key={i}/>
+                            <div className="inline-block" key={i}>
+                                <Hai hai={hai}/>
                             </div>
                         ) )}
                     </div>
