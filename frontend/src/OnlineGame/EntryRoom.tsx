@@ -84,7 +84,7 @@ export const EntryRoom = () => {
 			{isEnter && (
 				<div className="flex items-center mt-10">
 					<div className="loader"></div>
-					<p className="text-[#d016ff] text-xs ml-5">
+					<p className="text-left text-[#d016ff] text-xs ml-5">
 						メンバーが集まるのを待っています。モーダルを閉じないでください
 					</p>
 				</div>
@@ -103,17 +103,17 @@ export const EntryRoom = () => {
 						</>
 					) : (
 						<>
-							<p className="mt-5 text-xs">
+							<p className="mt-5 text-xs text-center">
 								masterからコードをもらい、入力してください.
 							</p>
 							<input
 								value={entryId}
-								className="text-black duration-200 mt-5 text-2xl block border rounded-[20px] w-[300px] text-center px-[20px] py-[10px] focus:outline-none"
+								className="m-auto text-black duration-200 mt-5 text-2xl block border rounded-[20px] w-[300px] text-center px-[20px] py-[10px] focus:outline-none"
 								onChange={(e) => setEntryId(e.target.value)}
 							/>
 							<button
 								onClick={entryRoom}
-								className="rounded-[20px] w-[300px] text-center px-[20px] py-[10px] block">
+								className="m-auto duration-200 hover:bg-[#38b48b] mt-5 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[10px]">
 								ルームに入る
 							</button>
 						</>
@@ -125,9 +125,9 @@ export const EntryRoom = () => {
 				{users.map((user, i) => (
 					<div
 						key={i}
-						className="w-full border border-gray-700 rounded-[20px] p-10">
+						className="w-full border border-gray-700 rounded-[20px] md:p-10 p-5">
 						<p className="text-md">player</p>
-						<p className="text-6xl overflow-scroll nobar">{user}</p>
+						<p className="md:text-6xl text-2xl overflow-scroll nobar">{user}</p>
 					</div>
 				))}
 			</div>

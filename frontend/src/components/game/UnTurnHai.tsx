@@ -11,7 +11,7 @@ export default function UnTurnHai(props: any) {
 				<Kawa kawa={kawa} />
 			</div>
 
-			<div className="flex fixed bottom-[2%] left-[5%] opacity-70">
+			<div className="flex fixed bottom-[2%] left-[5%] opacity-70 overflow-x-scroll">
 				{tehai.map((hai: any, index: number) => {
 					if (index < 13) {
 						return (

@@ -8,7 +8,7 @@ interface Props {
 
 const PlayerTehai: React.VFC<Props> = ({ tehai, discardMethod }) => {
 	return (
-		<div className="flex fixed bottom-[2%] left-[5%] opacity-90">
+		<div className="flex fixed bottom-[2%] left-[5%] opacity-90 overflow-x-scroll overflow-y-visible">
 			{tehai.map((hai, index) => {
 				if (index < 13) {
 					return (
@@ -20,7 +20,9 @@ const PlayerTehai: React.VFC<Props> = ({ tehai, discardMethod }) => {
 					);
 				} else {
 					return (
-						<div className="ml-4" key={index}>
+						<div
+							className="ml-4 overflow-x-scroll overflow-y-visible"
+							key={index}>
 							<HaiInPlayerTehai
 								hai={hai}
 								discardMethod={() => discardMethod(hai)}
