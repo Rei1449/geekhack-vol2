@@ -26,7 +26,7 @@ function App() {
 	return (
 		<>
 			<Routes>
-				{item === null ? (
+				{item === null || item === "" ? (
 					<>
 						<Route path="/" element={<Login />} />
 						<Route path="/test" element={<Login />} />
