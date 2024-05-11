@@ -466,20 +466,23 @@ const OnLineGame = () => {
 			{isMyTurn && !agariUsers[player_index] ? (
 				<>
 					{isMyTurn === true && (
-						<p className="text-orange-500 font-bold text-4xl fixed bottom-[20%] left-[5%]">
+						<p className="text-orange-500 font-bold md:text-4xl text-md fixed bottom-[20%] left-[5%]">
 							Now your turn.
 						</p>
 					)}
-					<Player
-						tehai={playerTehai}
-						kawa={kawas[player_index]}
-						discardMethod={discard}
-					/>
+					<div className="overflow-x-scroll w-full">
+						<Player
+							tehai={playerTehai}
+							kawa={kawas[player_index]}
+							discardMethod={discard}
+						/>
+					</div>
+
 					<Dialog>
-						<DialogTrigger className="fixed bottom-[20%] right-[5%] z-30 bg-[#151515] duration-200 hover:bg-[#38b48b] mt-5 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
+						<DialogTrigger className="fixed bottom-[20%] right-[5%] z-30 bg-[#151515] duration-200 hover:bg-[#38b48b] mt-5 text-2xl block border border-gray-500 rounded-[20px] md:w-[300px] w-[200px] text-center md:p-[20px] p-[10px]">
 							あがる →
 						</DialogTrigger>
-						<DialogContent className="text-white overflow-y-scroll nobar bg-origin border-gray-800 min-w-[70%] p-20 h-[80%]">
+						<DialogContent className="text-white overflow-y-scroll nobar bg-origin border-gray-800 min-w-[70%] md:p-20 p-5 h-[80%]">
 							<DialogHeader>
 								<p className="text-white flex items-center">
 									<span className="text-xl">Tehai</span>
@@ -505,8 +508,8 @@ const OnLineGame = () => {
 										onClick={() => handleAiNum(1)}
 										className={
 											num === 1
-												? "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#38b48b] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
-												: "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
+												? "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#38b48b] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[10px] md:p-[20px] text-md md:text-4xl font-bold text-white"
+												: "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[10px] md:p-[20px] text-md md:text-4xl font-bold text-white"
 										}>
 										LLaMA
 									</div>
@@ -514,8 +517,8 @@ const OnLineGame = () => {
 										onClick={() => handleAiNum(2)}
 										className={
 											num === 2
-												? "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#38b48b] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
-												: "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
+												? "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#38b48b] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[10px] md:p-[20px] text-md md:text-4xl font-bold text-white"
+												: "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[10px] md:p-[20px] text-md md:text-4xl font-bold text-white"
 										}>
 										{" "}
 										chatGPT
@@ -524,8 +527,8 @@ const OnLineGame = () => {
 										onClick={() => handleAiNum(3)}
 										className={
 											num === 3
-												? "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#38b48b] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
-												: "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[20px] text-4xl font-bold text-white"
+												? "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#38b48b] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[10px] md:p-[20px] text-md md:text-4xl font-bold text-white"
+												: "hover:scale-95 duration-200  hover:bg-[#38b48b] mt-5 bg-[#131313] cursor-pointer  border-gray-800 border w-[32%] rounded-[20px] p-[10px] md:p-[20px] text-md md:text-4xl font-bold text-white"
 										}>
 										{" "}
 										Gemini
@@ -556,17 +559,21 @@ const OnLineGame = () => {
 				</>
 			) : (
 				<>
-					<UnTurnHai tehai={playerTehai} kawa={kawas[player_index]} />
+					<div className="overflow-x-scroll">
+						<UnTurnHai tehai={playerTehai} kawa={kawas[player_index]} />
+					</div>
 				</>
 			)}
-			<div className="relative z-20 bg-[#151515] w-[60%] overflow-scroll m-auto min-h-[580px] max-h-[580px]">
+			<div className="relative z-20 bg-[#151515] md:w-[60%] w-[90%] overflow-scroll m-auto md:min-h-[580px] md:max-h-[580px] min-h-[560px]">
 				{[0, 1, 2, 3].map((i) => (
 					<div
 						key={`oponent${i}`}
 						className=" m-auto flex items-start border-b border-gray-600 pt-5">
-						<div className="w-[200px] overflow-x-scroll nobar mt-5">
+						<div className="md:w-[200px] w-[70px] overflow-x-scroll nobar mt-5">
 							<p className="text-xs">player</p>
-							<p className="text-4xl">{users[(player_index + i) % 4]}</p>
+							<p className="md:text-4xl text-xl">
+								{users[(player_index + i) % 4]}
+							</p>
 						</div>
 						<Oponent tehai={playerTehai} kawa={kawas[(player_index + i) % 4]} />
 					</div>
@@ -585,12 +592,12 @@ const OnLineGame = () => {
 					)}
 				</>
 			) : (
-				<div className="shadow rounded-[20px] z-50 text-white overflow-y-scroll nobar bg-origin border-gray-800 max-w-[70%] px-20 py-10 h-[80%] fixed top-[0%] bottom-[0%] m-auto left-[0%] right-[0%]">
+				<div className="shadow rounded-[20px] z-50 text-white overflow-y-scroll nobar bg-origin border-gray-800 md:max-w-[70%] max-w-[90%] md:px-20 px-5 py-10 h-[80%] fixed top-[0%] bottom-[0%] m-auto left-[0%] right-[0%]">
 					<div className="flex items-center justify-between">
-						<h2 className="text-6xl">Result</h2>
+						<h2 className="md:text-6xl text-xl">Result</h2>
 						<div>
 							<button
-								className=" duration-200 hover:bg-[#38b48b] mt-5 text-md block border border-gray-500 rounded-[20px] w-[250px] text-center p-[10px]"
+								className=" duration-200 hover:bg-[#38b48b] mt-5 text-md block border border-gray-500 rounded-[20px] md:w-[250px] w-[200px] text-center p-[10px]"
 								onClick={() =>
 									saveResult(
 										results[player_index].tehai,
@@ -601,7 +608,7 @@ const OnLineGame = () => {
 								自分の結果を保存する
 							</button>
 							<Link
-								className="duration-200  hover:bg-[#38b48b] mt-5 text-xl block border border-gray-500 rounded-[20px] w-[250px] text-center p-[10px]"
+								className="duration-200  hover:bg-[#38b48b] mt-5 text-xl block border border-gray-500 rounded-[20px] md:w-[250px] w-[200px] text-center p-[10px]"
 								to="/">
 								HOME →
 							</Link>
