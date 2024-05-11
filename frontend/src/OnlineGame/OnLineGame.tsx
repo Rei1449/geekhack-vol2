@@ -191,31 +191,6 @@ const calcPoint = async (
 	}
 };
 
-const saveResult = async (tehai: HaiInfo[], point: string, ai_id: number) => {
-	const item = localStorage.getItem(USER_NAME_KEY);
-	const tehaiForDB: string[] = [];
-	tehai.map((hai) => {
-		tehaiForDB.push(String(hai.kind) + String(hai.number));
-	});
-	const res = await fetch(ENDPOINT_URL + "store", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			user_name: item,
-			score: point,
-			arr: tehaiForDB,
-			ai: AI_NAMES[ai_id - 1],
-		}),
-	});
-	if (res.ok) {
-		const data = await res.json();
-		console.log(data);
-	} else {
-		console.log("error");
-	}
-};
 
 const OnLineGame = () => {
 	const location = useLocation();
@@ -234,21 +209,7 @@ const OnLineGame = () => {
 		}
 	});
 
-	// const cyama = makeYama();
-	// let cyama: any;
-	// useEffect(() => {
-	//     cyama = makeYama();
-	// WebSocketオブジェクトの作成
-	// const ws = new WebSocket('ws://example.com');
-
-	// コンポーネントがアンマウントされたときにWebSocketをクローズする
-	// return () => {
-	//     ws.close();
-	// };
-	// }, []); // 初回レンダリング時のみ実行されるように空の依存配列を指定
-
 	// state定義
-	// const [yama, setYama] = useState<HaiInfo[]>([]);
 	const [playerTehai, setPlayerTehai] = useState<HaiInfo[]>([]);
 	const [isMyTurn, setIsMyTurn] = useState<boolean>(false);
 	const [agariUsers, setAgariUsers] = useState<boolean[]>([
@@ -266,7 +227,6 @@ const OnLineGame = () => {
 	console.log(ryama);
 	console.log(playerTehai);
 
-	// console.log(yama);
 	// WebSocket定義
 	useEffect(() => {
 		console.log("websocket open");
@@ -303,14 +263,11 @@ const OnLineGame = () => {
 		SortHaiArray(tehai);
 		setPlayerTehai(tehai);
 		console.log("catchHaipai");
-		// console.log(yama);
 		if (isGM) {
-			// sendTumoHai(room_id, users[0], popYama());
 			setTimeout(() => {
 				console.log("exec timeout");
 				sendTumoHai(room_id, users[0], popYama());
 			}, 1000);
-			// clearTimeout(timeoutId);
 		}
 	};
 
@@ -436,6 +393,40 @@ const OnLineGame = () => {
 		setNum(num);
 	};
 	const [isNowGM, setIsNowGM] = useState(false);
+
+	const [isSuc, setIsSuc] = useState();
+	const [isSaveLoad, setSaveLoad] = useState(false);
+	const saveResult = async (tehai: HaiInfo[], point: string, ai_id: number) => {
+		setSaveLoad(true);
+		const item = localStorage.getItem(USER_NAME_KEY);
+		const tehaiForDB: string[] = [];
+		console.log(tehai);
+		console.log(point);
+		console.log(ai_id);
+		tehai.map((hai) => {
+			tehaiForDB.push(String(hai.kind) + String(hai.number));
+		});
+		const res = await fetch(ENDPOINT_URL + "store", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				user_name: item,
+				score: point,
+				arr: tehaiForDB,
+				ai: AI_NAMES[ai_id - 1],
+			}),
+		});
+		if (res.ok) {
+			const data = await res.json();
+			console.log(data);
+			setIsSuc(data.success);
+			setSaveLoad(false);
+		} else {
+			console.log("error");
+		}
+	};
 
 	return (
 		<div className="w-screen h-screen bg-[#151515] p-10">
@@ -596,17 +587,31 @@ const OnLineGame = () => {
 					<div className="flex items-center justify-between">
 						<h2 className="md:text-6xl text-xl">Result</h2>
 						<div>
-							<button
-								className=" duration-200 hover:bg-[#38b48b] mt-5 text-md block border border-gray-500 rounded-[20px] md:w-[250px] w-[200px] text-center p-[10px]"
-								onClick={() =>
-									saveResult(
-										results[player_index].tehai,
-										results[player_index].point,
-										results[player_index].ai_id
-									)
-								}>
-								自分の結果を保存する
-							</button>
+							{isSuc ? (
+								<></>
+							) : (
+								<>
+									{isSaveLoad && (
+										<>
+											<p>loading</p>
+										</>
+									)}
+									<button
+										className=" duration-200 hover:bg-[#38b48b] mt-5 text-md block border border-gray-500 rounded-[20px] w-[250px] text-center p-[10px]"
+										onClick={() =>
+											saveResult(
+												results[player_index].tehai,
+												results[player_index].point,
+												results[player_index].ai_id
+											)
+										}>
+										Save My Result
+									</button>
+								</>
+							)}
+
+							{isSuc && <>{isSuc}!</>}
+							
 							<Link
 								className="duration-200  hover:bg-[#38b48b] mt-5 text-xl block border border-gray-500 rounded-[20px] md:w-[250px] w-[200px] text-center p-[10px]"
 								to="/">
