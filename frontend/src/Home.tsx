@@ -113,9 +113,9 @@ export default function Home() {
 		getRanking();
 	}, []);
 	return (
-		<div className="w-screen h-screen bg-[#151515]">
-			<div className="flex items-center justify-between px-20 pt-[0%] h-screen">
-				<div className="overflow-y-scroll nobar w-[45%] bg-origin-2 h-[85%] rounded-[20px] p-10">
+		<div className="w-screen md:h-screen bg-[#151515]">
+			<div className="flex flex-wrap nobar flex-col-reverse md:flex-col items-center justify-between md:px-20 px-5 pt-[5%] md:h-screen h-full">
+				<div className="pb-40 md:pb-0 overflow-y-scroll nobar md:w-[45%] w-[100%] h-[800px] bg-origin-2 md:h-[85%] rounded-[20px] md:p-10 p-5 md:mt-0 mt-20">
 					{isLoading ? (
 						<>
 							<div className="flex border border-gray-800 p-[8px] rounded-[10px] justify-between">
@@ -126,8 +126,8 @@ export default function Home() {
 									}}
 									className={
 										isChoose === 1
-											? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
-											: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											? "border border-gray-800 cursor-pointer text-xs md:text-xl bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											: "border border-gray-800 cursor-pointer text-xs md:text-xl hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
 									}>
 									All(High)
 								</div>
@@ -138,8 +138,8 @@ export default function Home() {
 									}}
 									className={
 										isChoose === 2
-											? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
-											: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											? "border border-gray-800 cursor-pointer text-xs md:text-xl bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											: "border border-gray-800 cursor-pointer text-xs md:text-xl hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
 									}>
 									{" "}
 									llama
@@ -151,8 +151,8 @@ export default function Home() {
 									}}
 									className={
 										isChoose === 3
-											? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
-											: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											? "border border-gray-800 cursor-pointer text-xs md:text-xl bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											: "border border-gray-800 cursor-pointer text-xs md:text-xl hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
 									}>
 									{" "}
 									chatgpt
@@ -164,13 +164,13 @@ export default function Home() {
 									}}
 									className={
 										isChoose === 4
-											? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
-											: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											? "border border-gray-800 cursor-pointer text-xs md:text-xl bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											: "border border-gray-800 cursor-pointer text-xs md:text-xl hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
 									}>
 									{" "}
 									gemini
 								</div>
-								<div className="border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center">
+								<div className="border border-gray-800 cursor-pointer text-xs md:text-xl hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center">
 									All(Low)
 								</div>
 							</div>
@@ -186,8 +186,8 @@ export default function Home() {
 									}}
 									className={
 										isChoose === 1
-											? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
-											: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											? "border border-gray-800 cursor-pointer text-xs md:text-xl bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											: "border border-gray-800 cursor-pointer text-xs md:text-xl hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
 									}>
 									All(High)
 								</div>
@@ -198,8 +198,8 @@ export default function Home() {
 									}}
 									className={
 										isChoose === 2
-											? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
-											: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											? "border border-gray-800 cursor-pointer text-xs md:text-xl bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											: "border border-gray-800 cursor-pointer text-xs md:text-xl hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
 									}>
 									{" "}
 									llama
@@ -211,8 +211,8 @@ export default function Home() {
 									}}
 									className={
 										isChoose === 3
-											? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
-											: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											? "border border-gray-800 cursor-pointer text-xs md:text-xl bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											: "border border-gray-800 cursor-pointer text-xs md:text-xl hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
 									}>
 									{" "}
 									chatgpt
@@ -224,8 +224,8 @@ export default function Home() {
 									}}
 									className={
 										isChoose === 4
-											? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
-											: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											? "border border-gray-800 cursor-pointer text-xs md:text-xl bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											: "border border-gray-800 cursor-pointer text-xs md:text-xl hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
 									}>
 									{" "}
 									gemini
@@ -238,8 +238,8 @@ export default function Home() {
 									}}
 									className={
 										isChoose === 5
-											? "border border-gray-800 cursor-pointer bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
-											: "border border-gray-800 cursor-pointer hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											? "border border-gray-800 cursor-pointer text-xs md:text-xl bg-[#38b48b] hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
+											: "border border-gray-800 cursor-pointer text-xs md:text-xl hover:bg-[#38b48b] duration-300 p-1 rounded-[10px] w-[90px] text-center"
 									}>
 									{" "}
 									All(Low)
@@ -343,8 +343,8 @@ export default function Home() {
 						</>
 					)}
 				</div>
-				<div className="w-[50%]">
-					<h1 className="text-[220px] font-bold text-[#9c4efb] m-auto w-fit leading-none">
+				<div className="md:w-[50%] w-full">
+					<h1 className="md:text-[220px] text-[100px] font-bold text-[#9c4efb] m-auto w-fit leading-none">
 						Three
 					</h1>
 					<div className="m-auto mt-10 w-[300px]">

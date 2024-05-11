@@ -110,7 +110,7 @@ const MakeRoom = () => {
 					<>
 						<button
 							onClick={gameStart}
-							className="duration-200 hover:bg-[#38b48b] mt-5 text-2xl block border border-gray-500 rounded-[20px] w-[300px] text-center p-[20px]">
+							className="duration-200 hover:bg-[#38b48b] mt-5 text-2xl block border border-gray-500 rounded-[20px] md:w-[300px] w-[200px] text-center md:p-[20px] p-1">
 							ゲーム開始
 						</button>
 					</>
@@ -122,7 +122,7 @@ const MakeRoom = () => {
 			{isEnter && (
 				<div className="flex items-center mt-10">
 					<div className="loader"></div>
-					<p className="text-[#d016ff] text-xs ml-5">
+					<p className="text-[#d016ff] text-xs ml-5 text-left">
 						メンバーが集まるのを待っています。モーダルを閉じないでください。また、下記のコードをメンバーに共有してください
 					</p>
 				</div>
@@ -147,7 +147,7 @@ const MakeRoom = () => {
 							/> */}
 							<button
 								onClick={createRoom}
-								className="text-origin font-bold text-4xl mt-10">
+								className="text-origin font-bold md:text-4xl mt-10 text-xl">
 								ルームを作成する →
 							</button>
 						</>
@@ -159,9 +159,9 @@ const MakeRoom = () => {
 				{users.map((user, i) => (
 					<div
 						key={i}
-						className="w-full border border-gray-700 rounded-[20px] p-10">
-						<p className="text-md">player</p>
-						<p className="text-6xl overflow-scroll nobar">{user}</p>
+						className="w-full border border-gray-700 rounded-[20px] md:p-10 p-5">
+						<p className="md:text-md text-xs">player</p>
+						<p className="md:text-6xl text-2xl overflow-scroll nobar">{user}</p>
 					</div>
 				))}
 			</div>
